@@ -1,0 +1,10 @@
+﻿global using March.Web;
+global using March.Web.Utils;
+global using March.Web.Features.Counter;
+global using March.Web.Features.Home;
+global using March.Web.Features.Profile;
+global using Microsoft.AspNetCore.Components;
+global using Microsoft.AspNetCore.Http.HttpResults;
+global using static March.Web.Utils.Extensions;
+global using Microsoft.AspNetCore.ResponseCompression;
+global using March.Web.Features.NavMenu;

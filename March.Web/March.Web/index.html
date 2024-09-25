@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulma Layout with Transparent Hamburger Icon</title>
+    <script src="https://unpkg.com/htmx.org@2.0.2"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/json-enc.js"></script>
+    <link rel="stylesheet" href="App.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+    </style>
+</head>
+<body>
+
+    <div id="app"
+         hx-get="app" 
+         hx-trigger="revealed" 
+         hx-swap="outerHTML" 
+         hx-indicator="#loadingIndicator">
+    </div>
+
+    <progress class="htmx-indicator" id="loadingIndicator"></progress>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+</html>
