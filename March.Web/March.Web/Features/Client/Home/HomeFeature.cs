@@ -1,11 +1,11 @@
-﻿namespace March.Web.Features.Profile;
+﻿namespace March.Web.Features.Client.Home;
 
-public class ProfileEndpoint : IEndpoint
+public class HomeFeature : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
-        .MapGet("profile", HandleRequest)
+        .MapGet("home", HandleRequest)
         .AllowAnonymous()
-        .WithSummary("User profile");
+        .WithSummary("Home page");
 
     public record Request();
 
@@ -19,6 +19,6 @@ public class ProfileEndpoint : IEndpoint
 
     private static RazorComponentResult HandleRequest(CancellationToken cancellationToken)
     {
-        return Component<Profile>();
+        return Component<Home>();
     }
 }

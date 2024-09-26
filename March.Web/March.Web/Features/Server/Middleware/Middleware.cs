@@ -1,4 +1,4 @@
-﻿namespace March.Web.Utils;
+﻿namespace March.Web.Features.Server.Middleware;
 
 public class Redirect404Middleware(RequestDelegate next)
 {

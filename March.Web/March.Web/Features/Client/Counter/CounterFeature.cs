@@ -1,6 +1,6 @@
-﻿namespace March.Web.Features.Counter;
+﻿namespace March.Web.Features.Client.Counter;
 
-public class CounterEndpoint : IEndpoint
+public class CounterFeature : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("counter", HandleRequest)
@@ -19,12 +19,12 @@ public class CounterEndpoint : IEndpoint
     }
 
     private static RazorComponentResult HandleRequest(
-        CounterService counterService, 
-        Request request, 
+        CounterService counterService,
+        Request request,
         CancellationToken cancellationToken)
     {
-        return Component<Counter, CounterButtonModel>(model: new() 
-        { 
+        return Component<Counter, CounterButtonModel>(model: new()
+        {
             Count = request.Count
         });
     }

@@ -1,4 +1,4 @@
-﻿namespace March.Web.Features.Counter;
+﻿namespace March.Web.Features.Client.Counter;
 
 public class CounterButtonModel
 {

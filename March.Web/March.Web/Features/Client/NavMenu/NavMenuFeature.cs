@@ -1,13 +1,13 @@
-﻿namespace March.Web.Features.NavMenu;
+﻿namespace March.Web.Features.Client.NavMenu;
 
-public class NavMenuEndpoint : IEndpoint
+public class NavMenuFeature : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("nav", HandleRequest)
         .AllowAnonymous()
         .WithSummary("Open and close nav menu");
 
-    public record Request(string IsClosed);
+    public record Request(string IsCollapsed);
 
     public class RequestValidator
     {
@@ -21,7 +21,7 @@ public class NavMenuEndpoint : IEndpoint
     {
         return Component<NavMenu, NavMenuModel>(model: new()
         {
-            IsClosed = !bool.Parse(request.IsClosed)
+            IsCollapsed = !bool.Parse(request.IsCollapsed)
         });
     }
 }

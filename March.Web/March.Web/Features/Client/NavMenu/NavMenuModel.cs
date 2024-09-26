@@ -2,5 +2,5 @@
 
 public class NavMenuModel
 {
-    public bool IsClosed { get; set; }
+    public bool IsCollapsed { get; set; }
 }

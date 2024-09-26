@@ -1,11 +1,11 @@
-﻿namespace March.Web.Features.Home;
+﻿namespace March.Web.Features.Client.Form;
 
-public class HomeEndpoint : IEndpoint
+public class FormFeature : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
-        .MapGet("home", HandleRequest)
+        .MapGet("form", HandleRequest)
         .AllowAnonymous()
-        .WithSummary("Home page");
+        .WithSummary("Input form");
 
     public record Request();
 
@@ -19,6 +19,6 @@ public class HomeEndpoint : IEndpoint
 
     private static RazorComponentResult HandleRequest(CancellationToken cancellationToken)
     {
-        return Component<Home>();
+        return Component<Form, FormModel>(model: new());
     }
 }
