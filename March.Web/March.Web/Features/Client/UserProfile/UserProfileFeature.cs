@@ -1,13 +1,13 @@
 ﻿namespace March.Web.Features.Client.UserProfile;
 
-public class UserProfileFeature : IEndpoint
+public class UserProfileFeature
 {
-    public static void Map(IEndpointRouteBuilder app) => app
-        .MapGet("profile", HandleRequest)
-        .AllowAnonymous()
-        .WithSummary("User profile");
-
     public record Request();
+
+    public static RazorComponentResult HandleRequest(CancellationToken cancellationToken)
+    {
+        return Component<UserProfile>();
+    }
 
     public class RequestValidator
     {
@@ -15,10 +15,5 @@ public class UserProfileFeature : IEndpoint
         {
             // TODO: add FluentValidation   
         }
-    }
-
-    private static RazorComponentResult HandleRequest(CancellationToken cancellationToken)
-    {
-        return Component<UserProfile>();
     }
 }

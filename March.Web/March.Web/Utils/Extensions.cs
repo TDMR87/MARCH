@@ -24,4 +24,35 @@ public static class Extensions
         TEndpoint.Map(app);
         return app;
     }
+
+    public static IEndpointRouteBuilder AddPublicFeature(this WebApplication app)
+    {
+        return app.MapGroup("").AllowAnonymous();
+    }
+
+    public static IEndpointRouteBuilder AddPrivateFeature(this WebApplication app)
+    {
+        return app.MapGroup("").RequireAuthorization();
+    }
+
+    public static IEndpointRouteBuilder WithFeatureFlags(this IEndpointRouteBuilder app, params FeatureFlag[] featureFlags)
+    {
+        return app;
+    }
+
+    public static RouteHandlerBuilder WithRoutePath(
+        this IEndpointRouteBuilder routeBuilder,
+        HttpMethod httpMethod,
+        string routePath,
+        Delegate endpointHandler)
+    {
+        return httpMethod switch
+        {
+            HttpMethod.Get => routeBuilder.MapGet(routePath, endpointHandler),
+            HttpMethod.Post => routeBuilder.MapPost(routePath, endpointHandler),
+            HttpMethod.Put => routeBuilder.MapPut(routePath, endpointHandler),
+            HttpMethod.Delete => routeBuilder.MapDelete(routePath, endpointHandler),
+            _ => throw new NotSupportedException($"The specified Http method {httpMethod} is not supported")
+        };
+    }
 }

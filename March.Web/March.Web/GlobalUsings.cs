@@ -18,3 +18,7 @@ global using Microsoft.AspNetCore.Http.HttpResults;
 global using Microsoft.AspNetCore.ResponseCompression;
 global using March.Web.Features.Server.Rendering;
 global using static March.Web.Utils.Extensions;
+global using HttpMethod = March.Web.Utils.HttpMethod;
+global using March.Web.Features.Server.FeatureFlags;
+
+ 

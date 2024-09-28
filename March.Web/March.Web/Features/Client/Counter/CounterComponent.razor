@@ -1,0 +1,46 @@
+﻿<div id="counter">
+    <div class="control">
+        <label class="radio">
+            <input 
+                type="radio" 
+                checked="@Model.Increment" 
+                hx-post="counter/increment" 
+                hx-trigger="click" 
+                hx-target="#counter" 
+                hx-swap="outerHTML"
+                hx-ext='json-enc'
+                hx-vals='@((Model with { Increment = true }).ToJson())' />
+            Increment
+        </label>
+        <label class="radio">
+            <input
+                type="radio"
+                checked="@(!Model.Increment)"
+                hx-post="counter/decrement"
+                hx-trigger="click"
+                hx-target="#counter"
+                hx-swap="outerHTML"
+                hx-ext='json-enc'
+                hx-vals='@((Model with { Increment = false }).ToJson())' />
+            Decrement
+        </label>
+    </div>
+    <br />
+    <button class="button is-primary"
+            style="height:50px;width:100px;"
+            hx-post="counter/@(Model.Increment ? "increment" : "decrement")"
+            hx-ext='json-enc'
+            hx-trigger="click"
+            hx-target="#counter"
+            hx-swap="outerHTML"
+            hx-vals='@((Model with { Count = Model.Increment ? Model.Count + 1 : Model.Count - 1}).ToJson())'>
+        <span style="font-size:24px;">@Model.Count</span>
+    </button>
+</div>
+
+
+@code
+{
+    [Parameter]
+    public CounterComponentModel Model { get; set; } = new();
+}

@@ -27,6 +27,7 @@
                     hx-trigger="click" 
                     hx-target="#mainContentArea" 
                     hx-swap="innerHTML"
+                    hx-push-url="/"
                     hx-on::before-request="toggleNavButton()">
                     Home
                 </a>
@@ -36,7 +37,8 @@
                     hx-get="profile" 
                     hx-trigger="click" 
                     hx-target="#mainContentArea" 
-                    hx-swap="innerHTML" 
+                    hx-swap="innerHTML"
+                    hx-push-url="profile"
                     hx-on::before-request="toggleNavButton()">
                     Profile
                 </a>
@@ -47,11 +49,12 @@
         <ul class="menu-list">
             <li>
                 <a 
-                    hx-post="counter" 
+                    hx-get="counter" 
                     hx-trigger="click" 
                     hx-target="#mainContentArea" 
                     hx-swap="innerHTML" 
                     hx-ext='json-enc'
+                    hx-push-url="counter"
                     hx-on::before-request="toggleNavButton()">
                     Counter
                 </a>
@@ -62,6 +65,7 @@
                    hx-target="#mainContentArea"
                    hx-swap="innerHTML"
                    hx-ext='json-enc'
+                   hx-push-url="weather"
                    hx-on::before-request="toggleNavButton()">
                    Weather
                 </a>
@@ -76,6 +80,7 @@
                    hx-target="#mainContentArea"
                    hx-swap="innerHTML"
                    hx-ext='json-enc'
+                   hx-push-url="form"
                    hx-on::before-request="toggleNavButton()">
                    Form
                 </a>
@@ -86,6 +91,7 @@
                    hx-target="#mainContentArea"
                    hx-swap="innerHTML"
                    hx-ext='json-enc'
+                   hx-push-url="search"
                    hx-on::before-request="toggleNavButton()">
                    Search
                 </a>

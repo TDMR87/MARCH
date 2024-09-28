@@ -1,13 +1,13 @@
 ﻿namespace March.Web.Features.Client.Home;
 
-public class HomeFeature : IEndpoint
+public class HomeFeature
 {
-    public static void Map(IEndpointRouteBuilder app) => app
-        .MapGet("home", HandleRequest)
-        .AllowAnonymous()
-        .WithSummary("Home page");
-
     public record Request();
+
+    public static RazorComponentResult HandleRequest(CancellationToken cancellationToken)
+    {
+        return Component<Home>();
+    }
 
     public class RequestValidator
     {
@@ -15,10 +15,5 @@ public class HomeFeature : IEndpoint
         {
             // TODO: add FluentValidation   
         }
-    }
-
-    private static RazorComponentResult HandleRequest(CancellationToken cancellationToken)
-    {
-        return Component<Home>();
     }
 }
