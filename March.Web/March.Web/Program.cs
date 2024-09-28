@@ -10,55 +10,67 @@ builder.AddCorsFeature();
 builder.AddAuthFeature();
 builder.AddResponseCompressionFeature();
 builder.AddServerSideRenderingFeature();
-
-// Add services
 builder.Services.AddSingleton<FeatureFlagService>();
-
-var app = builder.Build();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 // Use server features
+var app = builder.Build();
 app.UseCorsFeature();
 app.UseStaticFilesFeature();
 app.UseHttpsRedirection();
 app.UseAuthFeature();
-
-// Use middleware
-app.UseMiddleware<Redirect404Middleware>();
 app.MapFallbackToFile("index.html");
 
-// Add application features
-var features = app.MapGroup("")
+// Add global request filters etc.
+var features = app
+    .MapGroup("")
     .AddEndpointFilter<RequestLoggingFilter>();
 
+// Add application features
 features.AddPublicFeature()
-   .WithRoutePath(HttpMethod.Post, "/nav", NavMenuFeature.HandleRequest)
-   .WithSummary("A navigation menu");
+        .WithRoutePath(HTTP.GET, "/home", HomeEndpoint.GetHome)
+        .WithSummary("Get the home page");
 
 features.AddPublicFeature()
-   .WithRoutePath(HttpMethod.Get, "/home", HomeFeature.HandleRequest)
-   .WithSummary("Get home page content");
+        .WithRoutePath(HTTP.POST, "/nav", NavEndpoint.ToggleNav)
+        .WithSummary("Open / close a navigation menu");
 
 features.AddPublicFeature()
-   .WithRoutePath(HttpMethod.Get, "counter", CounterEndpoint.Initialize)
-   .AddEndpointFilter<CounterEndpointLogger>()
-   .WithSummary("Initializes a counter button");
+        .WithRoutePath(HTTP.GET, "/how-it-works", HowItWorksEndpoint.GetHowItWorks)
+        .WithSummary("Get a how-it-works page");
 
 features.AddPublicFeature()
-   .WithRoutePath(HttpMethod.Post, "counter/increment", CounterEndpoint.Increment)
-   .AddEndpointFilter<CounterEndpointLogger>()
-   .WithValidation<CounterEndpointValidator>()
-   .WithSummary("Increments a counter button");
+        .WithRoutePath(HTTP.GET, "/counter", CounterEndpoint.GetCounter)
+        .WithFeatureFlags(FeatureFlag.Counter)
+        .WithSummary("Get a counter button");
 
 features.AddPublicFeature()
-   .WithRoutePath(HttpMethod.Post, "counter/decrement", CounterEndpoint.Decrement)
-   .AddEndpointFilter<CounterEndpointLogger>()
-   .WithValidation<CounterEndpointValidator>()
-   .WithSummary("Decrements a counter button");
+        .WithRoutePath(HTTP.POST, "/counter/increment", CounterEndpoint.IncrementCounter)
+        .WithFeatureFlags(FeatureFlag.CounterIncrement)
+        .WithValidation<CounterValidator>()
+        .WithSummary("Increment a counter button");
 
 features.AddPublicFeature()
-   .WithRoutePath(HttpMethod.Get, "/profile", UserProfileFeature.HandleRequest)
-   .WithSummary("Get user profile");
+        .WithRoutePath(HTTP.POST, "/counter/decrement", CounterEndpoint.DecrementCounter)
+        .WithFeatureFlags(FeatureFlag.CounterDecrement)
+        .WithValidation<CounterValidator>()
+        .WithSummary("Decrement a counter button");
 
-// Bind the root App component
+features.AddPublicFeature()
+        .WithRoutePath(HTTP.GET, "/form", FormEndpoint.GetForm)
+        .WithFeatureFlags(FeatureFlag.Form)
+        .WithSummary("Get an input form");
+
+features.AddPublicFeature()
+        .WithRoutePath(HTTP.POST, "/form/submit", FormEndpoint.SubmitForm)
+        .WithFeatureFlags(FeatureFlag.FormSubmit)
+        .WithValidation<FormValidator>()
+        .WithSummary("Submit an input form");
+
+features.AddPublicFeature()
+        .WithRoutePath(HTTP.POST, "/form/email", FormEndpoint.ValidateEmail)
+        .WithValidation<EmailValidator>()
+        .WithSummary("Submit an input form");
+
 app.MapGet("app", () => Component<App>());
 app.Run();

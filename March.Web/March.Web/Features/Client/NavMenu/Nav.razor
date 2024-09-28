@@ -1,0 +1,91 @@
+﻿<div id="navMenu" class="column is-3">
+
+    <span class="icon is-large block toggle-button" 
+          hx-post="nav" 
+          hx-trigger="click" 
+          hx-target="#navMenu" 
+          hx-swap="outerHTML" 
+          hx-ext='json-enc' 
+          hx-vals='{"IsCollapsed": @Model.IsCollapsed.ToString().ToLower()}'>
+        @if (Model.IsCollapsed)
+        {
+            <i class="fas fa-bars"></i>
+        }
+        else
+        {
+            <i class="fas fa-times"></i>
+        }
+    </span>
+
+    <aside class="menu" id="side-menu" style="display: @(Model.IsCollapsed ? "none" : string.Empty)">
+
+        <p class="menu-label">General</p>
+        <ul class="menu-list">
+            <li>
+                <a hx-get="home" 
+                   hx-trigger="click" 
+                   hx-target="#mainContentArea" 
+                   hx-swap="innerHTML"
+                   hx-on::before-request="toggleNavButton()">
+                   Home
+                </a>
+            </li>
+            <li>
+                <a hx-get="how-it-works" 
+                   hx-trigger="click" 
+                   hx-target="#mainContentArea" 
+                   hx-swap="innerHTML"
+                   hx-on::before-request="toggleNavButton()">
+                   How it works
+                </a>
+            </li>
+        </ul>
+
+        <p class="menu-label">Demo</p>
+        <ul class="menu-list">
+            <li>
+                <a hx-get="counter" 
+                   hx-trigger="click" 
+                   hx-target="#mainContentArea" 
+                   hx-swap="innerHTML" 
+                   hx-ext='json-enc'
+                   hx-on::before-request="toggleNavButton()">
+                   Counter
+                </a>
+            </li>
+            <li>
+                <a hx-get="form"
+                   hx-trigger="click"
+                   hx-target="#mainContentArea"
+                   hx-swap="innerHTML"
+                   hx-ext='json-enc'
+                   hx-on::before-request="toggleNavButton()">
+                    Form
+                </a>
+            </li>
+        </ul>
+    </aside>
+</div>
+
+<script>
+    function isSmallScreen() {
+        return window.matchMedia("(max-width: 768px)").matches;
+    }
+
+    function toggleNavButton() {
+        const navButton = document.querySelector('.toggle-button');
+        if (isSmallScreen() && navButton) {
+            navButton.click();
+        }
+    }
+</script>
+
+@code
+{
+    [Parameter] public NavModel Model { get; set; } = new() { IsCollapsed = false };
+
+    public class NavModel
+    {
+        public bool IsCollapsed { get; set; }
+    }
+}

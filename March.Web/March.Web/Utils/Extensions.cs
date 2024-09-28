@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿
 
 namespace March.Web.Utils;
 
@@ -15,9 +15,40 @@ public static class Extensions
         return routeBuilder.AddEndpointFilter<TValidator>();
     }
 
-    public static IEndpointRouteBuilder WithFeatureFlags(this IEndpointRouteBuilder app, params FeatureFlag[] featureFlags)
+    public static RouteHandlerBuilder WithFeatureFlags(this RouteHandlerBuilder routeBuilder, params FeatureFlag[] featureFlags)
     {
-        return app;
+        return routeBuilder.AddEndpointFilter(async (invocationContext, next) =>
+        {
+            var featureFlagService = invocationContext.HttpContext.RequestServices.GetRequiredService<FeatureFlagService>();
+            var logger = invocationContext.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+
+            foreach (var featureFlag in featureFlags)
+            {
+                if (featureFlagService.IsFeatureDisabled(featureFlag))
+                {
+                    logger.LogWarning("{Feature} feature is disabled", featureFlag);
+                    return Results.Problem($"{featureFlag} feature is disabled");
+                }
+            }
+
+            return await next(invocationContext);
+        });
+    }
+
+    public static RouteHandlerBuilder WithRoutePath(
+        this IEndpointRouteBuilder routeBuilder,
+        HTTP httpMethod,
+        string routePath,
+        Delegate endpointHandler)
+    {
+        return httpMethod switch
+        {
+            HTTP.GET => routeBuilder.MapGet(routePath, endpointHandler),
+            HTTP.POST => routeBuilder.MapPost(routePath, endpointHandler),
+            HTTP.PUT => routeBuilder.MapPut(routePath, endpointHandler),
+            HTTP.DELETE => routeBuilder.MapDelete(routePath, endpointHandler),
+            _ => throw new NotSupportedException($"Http method '{httpMethod}' is not supported")
+        };
     }
 
     public static RazorComponentResult Component<TComponent, TModel>(TModel? model = default) where TComponent : IComponent
@@ -32,21 +63,14 @@ public static class Extensions
         return new RazorComponentResult<TComponent>();
     }
 
-    public static bool In(this string text, string source) => source.Contains(text);
-
-    public static RouteHandlerBuilder WithRoutePath(
-        this IEndpointRouteBuilder routeBuilder,
-        HttpMethod httpMethod,
-        string routePath,
-        Delegate endpointHandler)
+    public static ValidationResult GetValidationResult(this HttpContext httpContext)
     {
-        return httpMethod switch
-        {
-            HttpMethod.Get => routeBuilder.MapGet(routePath, endpointHandler),
-            HttpMethod.Post => routeBuilder.MapPost(routePath, endpointHandler),
-            HttpMethod.Put => routeBuilder.MapPut(routePath, endpointHandler),
-            HttpMethod.Delete => routeBuilder.MapDelete(routePath, endpointHandler),
-            _ => throw new NotSupportedException($"Http method '{httpMethod}' is not supported")
-        };
+        var validationResult = httpContext.Items[Constants.ValidationResult] as FluentValidation.Results.ValidationResult;
+        return validationResult ?? throw new InvalidOperationException("No validation result found on HttpContext");
+    }
+
+    public static void SetValidationResult(this HttpContext httpContext, ValidationResult validationResult)
+    {
+        httpContext.Items.Add(Constants.ValidationResult, validationResult);
     }
 }

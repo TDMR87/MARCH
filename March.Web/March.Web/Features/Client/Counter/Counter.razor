@@ -1,0 +1,52 @@
+﻿<div id="counter">
+
+    <p class="title is-4">Counter</p>
+    <p class="subtitle is-5">Increase or decrease the value to see validation messages.</p>
+
+    <div class="is-flex is-flex-direction-row is-align-items-center">
+        <button class="button is-medium" 
+                hx-post="counter/decrement"
+                hx-trigger="click"
+                hx-target="#counter"
+                hx-swap="outerHTML"
+                hx-ext='json-enc'
+                hx-vals='@((Model with { Count = Model.Count - 1 }).ToJson())'>
+            <span class="icon is-medium">
+                <i class="fas fa-arrow-left"></i>
+            </span>
+        </button>
+        <div class="p-3">
+            <span class="title is-2">
+                @Model.Count
+            </span>
+        </div>
+        <button class="button is-medium"
+                hx-post="counter/increment"
+                hx-trigger="click"
+                hx-target="#counter"
+                hx-swap="outerHTML"
+                hx-ext='json-enc'
+                hx-vals='@((Model with { Count = Model.Count + 1 }).ToJson())'>
+            <span class="icon is-medium">
+                <i class="fas fa-arrow-right"></i>
+            </span>
+        </button>
+    </div>
+    @if (Model.Errors.Any(e => e.PropertyName == nameof(Model.Count)))
+    {
+        <p class="has-text-danger">@Model.Errors.First(e => e.PropertyName == nameof(Model.Count)).ErrorMessage</p>
+    }
+</div>
+
+@code
+{
+    [Parameter] public CounterModel Model { get; set; } = new();
+
+    public record CounterModel
+    {
+        public int Count { get; set; }
+        public bool IsIncrement { get; set; }
+        public List<(string PropertyName, string ErrorMessage)> Errors { get; set; } = [];
+        public string ToJson() => JsonSerializer.Serialize(this);
+    }
+}

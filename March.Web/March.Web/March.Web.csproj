@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.10.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Features\Server\StaticFiles\img\code-snippet-1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Features\Server\StaticFiles\index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

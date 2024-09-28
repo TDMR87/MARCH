@@ -4,13 +4,15 @@ public enum FeatureFlag
 {
     Counter,
     CounterIncrement,
-    CounterDecrement
+    CounterDecrement,
+    Form,
+    FormSubmit
 }
 
-public enum HttpMethod
+public enum HTTP
 {
-    Get,
-    Post,
-    Put,
-    Delete,
+    GET,
+    POST,
+    PUT,
+    DELETE,
 }

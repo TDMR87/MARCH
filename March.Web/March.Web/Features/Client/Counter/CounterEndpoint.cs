@@ -4,38 +4,36 @@ public class CounterEndpoint
 {
     public record Request(int Count);
 
-    public static IResult Initialize(FeatureFlagService featureFlags)
+    public static IResult GetCounter(FeatureFlagService featureFlags)
     {
-        return Component<CounterComponent, CounterComponentModel>(model: new()
+        return Component<Counter, CounterModel>(model: new()
         {
             Count = 0,
-            Increment = true
+            IsIncrement = true
         });
     }
 
-    public static IResult Increment(Request request, FeatureFlagService featureFlags)
+    public static IResult IncrementCounter(HttpContext httpContext, Request request, FeatureFlagService featureFlags)
     {
-        return Component<CounterComponent, CounterComponentModel>(model: new()
+        var validationResult = httpContext.GetValidationResult();
+
+        return Component<Counter, CounterModel>(model: new()
         {
+            IsIncrement = true,
             Count = request.Count,
-            Increment = true
+            Errors = validationResult.Errors.Select(e => (e.PropertyName, e.ErrorMessage)).ToList()
         });
     }
 
-    public static IResult Decrement(Request request, FeatureFlagService featureFlags)
+    public static IResult DecrementCounter(HttpContext httpContext, Request request, FeatureFlagService featureFlags)
     {
-        return Component<CounterComponent, CounterComponentModel>(model: new()
+        var validationResult = httpContext.GetValidationResult();
+
+        return Component<Counter, CounterModel>(model: new()
         {
+            IsIncrement = false,
             Count = request.Count,
-            Increment = false
+            Errors = validationResult.Errors.Select(e => (e.PropertyName, e.ErrorMessage)).ToList()
         });
-    }
-
-    public class CounterValidator
-    {
-        public CounterValidator()
-        {
-            // TODO: add FluentValidation   
-        }
     }
 }

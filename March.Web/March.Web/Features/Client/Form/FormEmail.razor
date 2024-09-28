@@ -1,0 +1,21 @@
+﻿<div class="field" hx-target="this" hx-swap="outerHTML">
+    <label class="label">Email</label>
+    <div class="control">
+        <input class="input"
+               type="email"
+               name="email"
+               value="@Model.Email"
+               placeholder="e.g. john.doe@email.com"
+               hx-post="form/email"
+               hx-ext='json-enc'>
+    </div>
+    @if (Model.Errors.Any(e => e.PropertyName == nameof(Model.Email)))
+    {
+        <p class="has-text-danger">@Model.Errors.First(e => e.PropertyName == nameof(Model.Email)).ErrorMessage</p>
+    }
+</div>
+
+@code 
+{
+    [Parameter] public FormModel Model { get; set; } = new();
+}
