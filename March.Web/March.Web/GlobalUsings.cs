@@ -1,6 +1,8 @@
 ﻿global using March.Web;
 global using March.Web.Utils;
+global using static March.Web.Utils.Extensions;
 global using March.Web.Features.Client.Counter;
+global using static March.Web.Features.Client.Counter.CounterComponent;
 global using March.Web.Features.Client.Home;
 global using March.Web.Features.Client.UserProfile;
 global using March.Web.Features.Server.StaticFiles;
@@ -17,8 +19,5 @@ global using Microsoft.AspNetCore.Components;
 global using Microsoft.AspNetCore.Http.HttpResults;
 global using Microsoft.AspNetCore.ResponseCompression;
 global using March.Web.Features.Server.Rendering;
-global using static March.Web.Utils.Extensions;
 global using HttpMethod = March.Web.Utils.HttpMethod;
 global using March.Web.Features.Server.FeatureFlags;
-
- 

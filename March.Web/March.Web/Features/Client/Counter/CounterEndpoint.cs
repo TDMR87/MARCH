@@ -6,11 +6,7 @@ public class CounterEndpoint
 
     public static IResult Initialize(FeatureFlagService featureFlags)
     {
-        if (featureFlags.IsFeatureDisabled(FeatureFlag.Counter))
-        {
-            return Results.Problem($"Feature '{FeatureFlag.Counter}' is disabled");
-        }
-        else return Component<CounterComponent, CounterComponentModel>(model: new()
+        return Component<CounterComponent, CounterComponentModel>(model: new()
         {
             Count = 0,
             Increment = true
@@ -19,11 +15,7 @@ public class CounterEndpoint
 
     public static IResult Increment(Request request, FeatureFlagService featureFlags)
     {
-        if (featureFlags.IsFeatureDisabled(FeatureFlag.CounterIncrement))
-        {
-            return Results.Problem($"Feature '{FeatureFlag.CounterIncrement}' is disabled");
-        }
-        else return Component<CounterComponent, CounterComponentModel>(model: new()
+        return Component<CounterComponent, CounterComponentModel>(model: new()
         {
             Count = request.Count,
             Increment = true
@@ -32,20 +24,16 @@ public class CounterEndpoint
 
     public static IResult Decrement(Request request, FeatureFlagService featureFlags)
     {
-        if (featureFlags.IsFeatureDisabled(FeatureFlag.CounterDecrement))
-        {
-            return Results.Problem($"Feature '{FeatureFlag.CounterDecrement}' is disabled");
-        }
-        else return Component<CounterComponent, CounterComponentModel>(model: new()
+        return Component<CounterComponent, CounterComponentModel>(model: new()
         {
             Count = request.Count,
             Increment = false
         });
     }
 
-    public class RequestValidator
+    public class CounterValidator
     {
-        public RequestValidator()
+        public CounterValidator()
         {
             // TODO: add FluentValidation   
         }

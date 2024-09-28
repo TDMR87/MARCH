@@ -12,6 +12,9 @@
                 hx-vals='@((Model with { Increment = true }).ToJson())' />
             Increment
         </label>
+    </div>
+
+    <div class="control">
         <label class="radio">
             <input
                 type="radio"
@@ -26,21 +29,35 @@
         </label>
     </div>
     <br />
-    <button class="button is-primary"
-            style="height:50px;width:100px;"
-            hx-post="counter/@(Model.Increment ? "increment" : "decrement")"
-            hx-ext='json-enc'
-            hx-trigger="click"
-            hx-target="#counter"
-            hx-swap="outerHTML"
-            hx-vals='@((Model with { Count = Model.Increment ? Model.Count + 1 : Model.Count - 1}).ToJson())'>
-        <span style="font-size:24px;">@Model.Count</span>
-    </button>
+    <div class="field">
+        <label class="label">@Description</label>
+        <div class="control">
+            <button class="button is-primary"
+                    style="height:50px;width:100px;"
+                    hx-post="counter/@(Model.Increment ? "increment" : "decrement")"
+                    hx-ext='json-enc'
+                    hx-trigger="click"
+                    hx-target="#counter"
+                    hx-swap="outerHTML"
+                    hx-vals='@((Model with { Count = Model.Increment ? Model.Count + 1 : Model.Count - 1}).ToJson())'>
+                <span style="font-size:24px;">@Model.Count</span>
+            </button>
+        </div>
+    </div>
 </div>
-
 
 @code
 {
-    [Parameter]
-    public CounterComponentModel Model { get; set; } = new();
+    [Parameter] public CounterComponentModel Model { get; set; } = new();
+
+    string Description => Model.Increment
+        ? "Maximum value is 10"
+        : "Minimum value is -10";
+
+    public record CounterComponentModel
+    {
+        public int Count { get; set; }
+        public bool Increment { get; set; }
+        public string ToJson() => JsonSerializer.Serialize(this);
+    }
 }

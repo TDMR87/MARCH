@@ -1,10 +1,23 @@
-﻿namespace March.Web.Utils;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace March.Web.Utils;
 
 public static class Extensions
 {
-    public interface IEndpoint
+    public static IEndpointRouteBuilder AddPublicFeature(this RouteGroupBuilder routeBuilder) =>  routeBuilder
+        .AllowAnonymous();
+
+    public static IEndpointRouteBuilder AddPrivateFeature(this RouteGroupBuilder routeBuilder) => routeBuilder
+        .RequireAuthorization();
+
+    public static RouteHandlerBuilder WithValidation<TValidator>(this RouteHandlerBuilder routeBuilder) where TValidator : IEndpointFilter
     {
-        static abstract void Map(IEndpointRouteBuilder app);
+        return routeBuilder.AddEndpointFilter<TValidator>();
+    }
+
+    public static IEndpointRouteBuilder WithFeatureFlags(this IEndpointRouteBuilder app, params FeatureFlag[] featureFlags)
+    {
+        return app;
     }
 
     public static RazorComponentResult Component<TComponent, TModel>(TModel? model = default) where TComponent : IComponent
@@ -19,26 +32,7 @@ public static class Extensions
         return new RazorComponentResult<TComponent>();
     }
 
-    public static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app) where TEndpoint : IEndpoint
-    {
-        TEndpoint.Map(app);
-        return app;
-    }
-
-    public static IEndpointRouteBuilder AddPublicFeature(this WebApplication app)
-    {
-        return app.MapGroup("").AllowAnonymous();
-    }
-
-    public static IEndpointRouteBuilder AddPrivateFeature(this WebApplication app)
-    {
-        return app.MapGroup("").RequireAuthorization();
-    }
-
-    public static IEndpointRouteBuilder WithFeatureFlags(this IEndpointRouteBuilder app, params FeatureFlag[] featureFlags)
-    {
-        return app;
-    }
+    public static bool In(this string text, string source) => source.Contains(text);
 
     public static RouteHandlerBuilder WithRoutePath(
         this IEndpointRouteBuilder routeBuilder,
@@ -52,7 +46,7 @@ public static class Extensions
             HttpMethod.Post => routeBuilder.MapPost(routePath, endpointHandler),
             HttpMethod.Put => routeBuilder.MapPut(routePath, endpointHandler),
             HttpMethod.Delete => routeBuilder.MapDelete(routePath, endpointHandler),
-            _ => throw new NotSupportedException($"The specified Http method {httpMethod} is not supported")
+            _ => throw new NotSupportedException($"Http method '{httpMethod}' is not supported")
         };
     }
 }

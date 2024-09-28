@@ -1,6 +1,6 @@
 ﻿namespace March.Web.Features.Client.Form;
 
-public class FormFeature : IEndpoint
+public class FormFeature
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapGet("form", HandleRequest)

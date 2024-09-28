@@ -26,34 +26,36 @@ app.UseAuthFeature();
 app.UseMiddleware<Redirect404Middleware>();
 app.MapFallbackToFile("index.html");
 
-//app.MapGroup("")
-//    .AddEndpointFilter<RequestLoggingFilter>();
+// Add application features
+var features = app.MapGroup("")
+    .AddEndpointFilter<RequestLoggingFilter>();
 
-// Use client features
-app.AddPublicFeature()
-   .WithRoutePath(HttpMethod.Get, "counter", CounterEndpoint.Initialize)
-   .AddEndpointFilter<CounterEndpointFilter>()
-   .WithSummary("Initialize a counter button");
+features.AddPublicFeature()
+   .WithRoutePath(HttpMethod.Post, "/nav", NavMenuFeature.HandleRequest)
+   .WithSummary("A navigation menu");
 
-app.AddPublicFeature()
-   .WithRoutePath(HttpMethod.Post, "counter/increment", CounterEndpoint.Increment)
-   .AddEndpointFilter<CounterEndpointFilter>()
-   .WithSummary("Increment a counter button");
-
-app.AddPublicFeature()
-   .WithRoutePath(HttpMethod.Post, "counter/decrement", CounterEndpoint.Decrement)
-   .AddEndpointFilter<CounterEndpointFilter>()
-   .WithSummary("Decrement a counter button");
-
-app.AddPublicFeature()
+features.AddPublicFeature()
    .WithRoutePath(HttpMethod.Get, "/home", HomeFeature.HandleRequest)
    .WithSummary("Get home page content");
 
-app.AddPublicFeature()
-   .WithRoutePath(HttpMethod.Post, "/nav", NavMenuFeature.HandleRequest)
-   .WithSummary("Open / close a navigation menu");
+features.AddPublicFeature()
+   .WithRoutePath(HttpMethod.Get, "counter", CounterEndpoint.Initialize)
+   .AddEndpointFilter<CounterEndpointLogger>()
+   .WithSummary("Initializes a counter button");
 
-app.AddPublicFeature()
+features.AddPublicFeature()
+   .WithRoutePath(HttpMethod.Post, "counter/increment", CounterEndpoint.Increment)
+   .AddEndpointFilter<CounterEndpointLogger>()
+   .WithValidation<CounterEndpointValidator>()
+   .WithSummary("Increments a counter button");
+
+features.AddPublicFeature()
+   .WithRoutePath(HttpMethod.Post, "counter/decrement", CounterEndpoint.Decrement)
+   .AddEndpointFilter<CounterEndpointLogger>()
+   .WithValidation<CounterEndpointValidator>()
+   .WithSummary("Decrements a counter button");
+
+features.AddPublicFeature()
    .WithRoutePath(HttpMethod.Get, "/profile", UserProfileFeature.HandleRequest)
    .WithSummary("Get user profile");
 
