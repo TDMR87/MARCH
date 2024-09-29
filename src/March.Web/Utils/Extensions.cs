@@ -7,7 +7,7 @@ public static class Extensions
     public static IEndpointRouteBuilder AddPublicFeature(this RouteGroupBuilder routeBuilder) =>  routeBuilder
         .AllowAnonymous();
 
-    public static IEndpointRouteBuilder AddPrivateFeature(this RouteGroupBuilder routeBuilder) => routeBuilder
+    public static IEndpointRouteBuilder AddProtectedFeature(this RouteGroupBuilder routeBuilder) => routeBuilder
         .RequireAuthorization();
 
     public static RouteHandlerBuilder WithValidation<TValidator>(this RouteHandlerBuilder routeBuilder) where TValidator : IEndpointFilter

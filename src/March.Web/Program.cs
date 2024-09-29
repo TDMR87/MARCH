@@ -94,7 +94,7 @@ features.AddPublicFeature()
         .WithRoutePath(HTTP.GET, "/logout", LogoutEndpoint.Logout)
         .WithSummary("Log out");
 
-features.AddPrivateFeature()
+features.AddProtectedFeature()
         .WithRoutePath(HTTP.GET, "/admin/dashboard", AdminEndpoint.GetDashboard)
         .WithSummary("Get the admin dashboard");
 
