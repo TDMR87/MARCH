@@ -4,8 +4,8 @@ public static class Auth
 {
     public static void AddAuthFeature(this WebApplicationBuilder builder)
     {
-        builder.Services.AddAuthentication("MarchCookieAuth")
-            .AddCookie("MarchCookieAuth", options =>
+        builder.Services.AddAuthentication(Constants.MarchAuthCookie)
+            .AddCookie(Constants.MarchAuthCookie, options =>
             {
                 options.LoginPath = "/login"; // Redirect to this path for login
                 options.AccessDeniedPath = "/"; // Redirect to this path if access is denied

@@ -34,7 +34,7 @@ var features = app
 // Add application features
 features.AddPublicFeature()
         .WithRoutePath(HTTP.GET, "/home", HomeEndpoint.GetHome)
-        .WithSummary("Get the home page");
+        .WithSummary("Get the home page content");
 
 features.AddPublicFeature()
         .WithRoutePath(HTTP.GET, "/nav", NavEndpoint.GetNav)
@@ -79,7 +79,7 @@ features.AddPublicFeature()
 features.AddPublicFeature()
         .WithRoutePath(HTTP.POST, "/form/email", FormEndpoint.ValidateEmail)
         .WithValidation<EmailValidator>()
-        .WithSummary("Submit an input form");
+        .WithSummary("Validate email");
 
 features.AddPublicFeature()
         .WithRoutePath(HTTP.GET, "/login", LoginEndpoint.GetLogin)
@@ -88,11 +88,11 @@ features.AddPublicFeature()
 features.AddPublicFeature()
         .WithRoutePath(HTTP.POST, "/login", LoginEndpoint.SubmitLogin)
         .WithValidation<LoginValidator>()
-        .WithSummary("Submit a login form");
+        .WithSummary("Login");
 
 features.AddPublicFeature()
         .WithRoutePath(HTTP.GET, "/logout", LogoutEndpoint.Logout)
-        .WithSummary("Log out the user");
+        .WithSummary("Log out");
 
 features.AddPrivateFeature()
         .WithRoutePath(HTTP.GET, "/admin/dashboard", AdminEndpoint.GetDashboard)

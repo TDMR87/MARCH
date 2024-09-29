@@ -28,10 +28,10 @@ public class LoginEndpoint
             new(ClaimTypes.Name, request.Username)
         };
 
-        await httpContext.SignInAsync("MarchCookieAuth", new ClaimsPrincipal(new ClaimsIdentity(
+        await httpContext.SignInAsync(Constants.MarchAuthCookie, new ClaimsPrincipal(new ClaimsIdentity(
         [
             new(ClaimTypes.Name, request.Username)
-        ], "MarchCookieAuth")));
+        ], Constants.MarchAuthCookie)));
 
         httpContext.Response.Headers["HX-Trigger"] = "login";
 
