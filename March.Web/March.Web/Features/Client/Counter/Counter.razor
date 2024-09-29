@@ -32,21 +32,24 @@
             </span>
         </button>
     </div>
-    @if (Model.Errors.Any(e => e.PropertyName == nameof(Model.Count)))
+    @if (ValidationContext.Errors.Any(e => e.PropertyName == nameof(Model.Count)))
     {
-        <p class="has-text-danger">@Model.Errors.First(e => e.PropertyName == nameof(Model.Count)).ErrorMessage</p>
+        <p class="has-text-danger">@ValidationContext.ValidationResults.Errors.First(
+            e => e.PropertyName == nameof(Model.Count)).ErrorMessage
+        </p>
     }
 </div>
 
 @code
 {
+    [Inject] public ValidationContext ValidationContext { get; set; } = new();
+
     [Parameter] public CounterModel Model { get; set; } = new();
 
     public record CounterModel
     {
         public int Count { get; set; }
         public bool IsIncrement { get; set; }
-        public List<(string PropertyName, string ErrorMessage)> Errors { get; set; } = [];
         public string ToJson() => JsonSerializer.Serialize(this);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace March.Web.Utils;
 
-public class ValidatorBase<TRequest>(ILogger<ValidatorBase<TRequest>> logger, IValidator<TRequest> validator) : IEndpointFilter
+public class ValidatorBase<TRequest>(ILogger<ValidatorBase<TRequest>> logger, IValidator<TRequest> validator, ValidationContext validationContext) : IEndpointFilter
 {
     public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
@@ -14,7 +14,7 @@ public class ValidatorBase<TRequest>(ILogger<ValidatorBase<TRequest>> logger, IV
         }
 
         var validationResult = await validator.ValidateAsync(requestModel);
-        context.HttpContext.SetValidationResult(validationResult);
+        validationContext.ValidationResults = validationResult;
 
         return await next(context);
     }

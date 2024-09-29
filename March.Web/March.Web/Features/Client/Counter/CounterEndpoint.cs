@@ -13,27 +13,21 @@ public class CounterEndpoint
         });
     }
 
-    public static IResult IncrementCounter(HttpContext httpContext, Request request, FeatureFlagService featureFlags)
+    public static IResult IncrementCounter(Request request, FeatureFlagService featureFlags)
     {
-        var validationResult = httpContext.GetValidationResult();
-
         return Component<Counter, CounterModel>(model: new()
         {
             IsIncrement = true,
             Count = request.Count,
-            Errors = validationResult.Errors.Select(e => (e.PropertyName, e.ErrorMessage)).ToList()
         });
     }
 
-    public static IResult DecrementCounter(HttpContext httpContext, Request request, FeatureFlagService featureFlags)
+    public static IResult DecrementCounter(Request request, FeatureFlagService featureFlags)
     {
-        var validationResult = httpContext.GetValidationResult();
-
         return Component<Counter, CounterModel>(model: new()
         {
             IsIncrement = false,
             Count = request.Count,
-            Errors = validationResult.Errors.Select(e => (e.PropertyName, e.ErrorMessage)).ToList()
         });
     }
 }

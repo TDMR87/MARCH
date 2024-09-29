@@ -62,15 +62,4 @@ public static class Extensions
     {
         return new RazorComponentResult<TComponent>();
     }
-
-    public static ValidationResult GetValidationResult(this HttpContext httpContext)
-    {
-        var validationResult = httpContext.Items[Constants.ValidationResult] as FluentValidation.Results.ValidationResult;
-        return validationResult ?? throw new InvalidOperationException("No validation result found on HttpContext");
-    }
-
-    public static void SetValidationResult(this HttpContext httpContext, ValidationResult validationResult)
-    {
-        httpContext.Items.Add(Constants.ValidationResult, validationResult);
-    }
 }

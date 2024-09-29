@@ -9,13 +9,17 @@
                hx-post="form/email"
                hx-ext='json-enc'>
     </div>
-    @if (Model.Errors.Any(e => e.PropertyName == nameof(Model.Email)))
+    @if (ValidationContext.Errors.Any(e => e.PropertyName == nameof(Model.Email)))
     {
-        <p class="has-text-danger">@Model.Errors.First(e => e.PropertyName == nameof(Model.Email)).ErrorMessage</p>
+        <p class="has-text-danger">@ValidationContext.ValidationResults.Errors.First(
+            e => e.PropertyName == nameof(Model.Email)).ErrorMessage
+        </p>
     }
 </div>
 
 @code 
 {
+    [Inject] public ValidationContext ValidationContext { get; set; } = new();
+
     [Parameter] public FormModel Model { get; set; } = new();
 }

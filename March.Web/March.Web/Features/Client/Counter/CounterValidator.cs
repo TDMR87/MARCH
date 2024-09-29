@@ -12,5 +12,6 @@ public class CounterRulesValidator : AbstractValidator<CounterEndpoint.Request>
 
 public class CounterValidator(
     ILogger<CounterValidator> logger, 
-    IValidator<CounterEndpoint.Request> validator) 
-    : ValidatorBase<CounterEndpoint.Request>(logger, validator);
+    IValidator<CounterEndpoint.Request> validator,
+    ValidationContext validationContext) 
+    : ValidatorBase<CounterEndpoint.Request>(logger, validator, validationContext);

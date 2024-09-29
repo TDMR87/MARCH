@@ -10,6 +10,7 @@ builder.AddCorsFeature();
 builder.AddAuthFeature();
 builder.AddResponseCompressionFeature();
 builder.AddServerSideRenderingFeature();
+builder.Services.AddScoped<ValidationContext>();
 builder.Services.AddSingleton<FeatureFlagService>();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 

@@ -31,10 +31,12 @@ public class FormEmailValidator : AbstractValidator<FormEndpoint.EmailValidation
 
 public class FormValidator(
     ILogger<FormValidator> logger, 
-    IValidator<FormEndpoint.FormSubmitRequest> validator) 
-    : ValidatorBase<FormEndpoint.FormSubmitRequest>(logger, validator);
+    IValidator<FormEndpoint.FormSubmitRequest> validator,
+    ValidationContext validationContext) 
+    : ValidatorBase<FormEndpoint.FormSubmitRequest>(logger, validator, validationContext);
 
 public class EmailValidator(
     ILogger<EmailValidator> logger, 
-    IValidator<FormEndpoint.EmailValidationRequest> validator) 
-    : ValidatorBase<FormEndpoint.EmailValidationRequest>(logger, validator);
+    IValidator<FormEndpoint.EmailValidationRequest> validator, 
+    ValidationContext validationContext) 
+    : ValidatorBase<FormEndpoint.EmailValidationRequest>(logger, validator, validationContext);
