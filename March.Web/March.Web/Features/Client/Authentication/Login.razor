@@ -1,0 +1,39 @@
+﻿<form hx-boost="true" hx-post="login" method='post' hx-ext='json-enc' hx-target="#mainContentArea">
+    
+    <p class="subtitle is-6">Login as administrator to get access to the admin dashboard</p>
+    <p class="subtitle is-7">(Note: valid login credentials are "admin" and "test")</p>
+
+    <div class="field">
+        <label class="label">Name</label>
+        <div class="control">
+            <input name="username" value="@Model.Username" class="input" type="text" placeholder="e.g admin">
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">Password</label>
+        <div class="control">
+            <input name="password" value="@Model.Password" class="input" type="password" placeholder="****">
+        </div>
+    </div>
+    <br />
+    <button class="button is-primary">Login</button>
+    @if (ValidationContext.Errors.Any())
+    {
+        <p class="has-text-danger">
+            Login failed
+        </p>
+    }
+</form>
+
+@code 
+{
+    [Inject] public ValidationContext ValidationContext { get; set; } = new();
+
+    [Parameter] public LoginFormModel Model { get; set; } = new();
+
+    public record LoginFormModel
+    {
+        public string? Username { get; set; }
+        public string? Password { get; set; }
+    }
+}

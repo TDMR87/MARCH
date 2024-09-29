@@ -63,7 +63,51 @@
                     Form
                 </a>
             </li>
+            @if (HttpContextAccessor?.HttpContext?.User.Identity?.IsAuthenticated == false)
+            {
+                <li>
+                    <a hx-get="login"
+                       hx-trigger="click"
+                       hx-target="#mainContentArea"
+                       hx-swap="innerHTML"
+                       hx-ext='json-enc'
+                       hx-on::before-request="toggleNavButton()">
+                       Log in
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a hx-get="logout"
+                       hx-trigger="click"
+                       hx-target="#mainContentArea"
+                       hx-swap="innerHTML"
+                       hx-ext='json-enc'
+                       hx-on::before-request="toggleNavButton()">
+                       Log out
+                    </a>
+                </li>
+            }
         </ul>
+
+        @* Areas requiring authorization *@
+        @if (HttpContextAccessor?.HttpContext?.User.Identity?.IsAuthenticated == true)
+        {
+            <p class="menu-label">Authorization</p>
+            <ul class="menu-list">
+                <li>
+                    <a hx-get="admin-dashboard"
+                       hx-trigger="click"
+                       hx-target="#mainContentArea"
+                       hx-swap="innerHTML"
+                       hx-ext='json-enc'
+                       hx-on::before-request="toggleNavButton()">
+                       Admin dashboard
+                    </a>
+                </li>
+            </ul>
+        }
     </aside>
 </div>
 
@@ -82,6 +126,8 @@
 
 @code
 {
+    [Inject] public IHttpContextAccessor? HttpContextAccessor { get; set; }
+
     [Parameter] public NavModel Model { get; set; } = new() { IsCollapsed = false };
 
     public class NavModel

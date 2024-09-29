@@ -1,3 +1,5 @@
+using March.Web.Features.Client.Authentication;
+
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
     Args = args,
@@ -11,6 +13,7 @@ builder.AddAuthFeature();
 builder.AddResponseCompressionFeature();
 builder.AddServerSideRenderingFeature();
 builder.Services.AddScoped<ValidationContext>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<FeatureFlagService>();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
@@ -72,6 +75,16 @@ features.AddPublicFeature()
         .WithRoutePath(HTTP.POST, "/form/email", FormEndpoint.ValidateEmail)
         .WithValidation<EmailValidator>()
         .WithSummary("Submit an input form");
+
+features.AddPublicFeature()
+        .WithRoutePath(HTTP.GET, "/login", LoginEndpoint.GetLogin)
+        .WithSummary("Get login form");
+
+features.AddPublicFeature()
+        .WithRoutePath(HTTP.POST, "/login", LoginEndpoint.SubmitLogin)
+        .WithValidation<LoginValidator>()
+        .WithSummary("Submit a login form");
+
 
 app.MapGet("app", () => Component<App>());
 app.Run();
