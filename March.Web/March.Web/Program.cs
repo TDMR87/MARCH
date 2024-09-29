@@ -1,3 +1,4 @@
+using March.Web.Features.Client.AdminDashboard;
 using March.Web.Features.Client.Authentication;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
@@ -34,6 +35,10 @@ var features = app
 features.AddPublicFeature()
         .WithRoutePath(HTTP.GET, "/home", HomeEndpoint.GetHome)
         .WithSummary("Get the home page");
+
+features.AddPublicFeature()
+        .WithRoutePath(HTTP.GET, "/nav", NavEndpoint.GetNav)
+        .WithSummary("Get the navigation menu");
 
 features.AddPublicFeature()
         .WithRoutePath(HTTP.POST, "/nav", NavEndpoint.ToggleNav)
@@ -85,6 +90,13 @@ features.AddPublicFeature()
         .WithValidation<LoginValidator>()
         .WithSummary("Submit a login form");
 
+features.AddPublicFeature()
+        .WithRoutePath(HTTP.GET, "/logout", LogoutEndpoint.Logout)
+        .WithSummary("Log out the user");
+
+features.AddPrivateFeature()
+        .WithRoutePath(HTTP.GET, "/admin/dashboard", AdminEndpoint.GetDashboard)
+        .WithSummary("Get the admin dashboard");
 
 app.MapGet("app", () => Component<App>());
 app.Run();

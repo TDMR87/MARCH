@@ -22,5 +22,6 @@ global using March.Web.Features.Server.ResponseCompression;
 global using Microsoft.AspNetCore.Components;
 global using Microsoft.AspNetCore.Http.HttpResults;
 global using Microsoft.AspNetCore.ResponseCompression;
+global using Microsoft.AspNetCore.Authentication;
 global using March.Web.Features.Server.Rendering;
 global using March.Web.Features.Server.FeatureFlags;

@@ -4,7 +4,12 @@ public class NavEndpoint
 {
     public record Request(string IsCollapsed);
 
-    public static IResult ToggleNav(Request request, CancellationToken cancellationToken)
+    public static IResult GetNav()
+    {
+        return Component<Nav>();
+    }
+
+    public static IResult ToggleNav(Request request)
     {
         return Component<Nav, NavModel>(model: new()
         {

@@ -33,6 +33,8 @@ public class LoginEndpoint
             new(ClaimTypes.Name, request.Username)
         ], "MarchCookieAuth")));
 
+        httpContext.Response.Headers["HX-Trigger"] = "login";
+
         return Component<Home.Home>();
     }
 }

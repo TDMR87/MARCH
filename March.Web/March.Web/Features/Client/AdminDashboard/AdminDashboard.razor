@@ -1,0 +1,12 @@
+﻿<p class="title is-4">Welcome to admin dashboard, <b>@GetUsername()</b>!</p>
+<p class="subtitle is-7">(you should only be seeing this section when logged in...)</p>
+
+@code 
+{
+    [Inject] public IHttpContextAccessor? HttpContextAccessor { get; set; }
+
+    string GetUsername() => HttpContextAccessor?.HttpContext?.User?.Identity?.IsAuthenticated == true
+        ? HttpContextAccessor?.HttpContext?.User.Claims.First(claim => claim.Type == ClaimTypes.Name).Value
+        : "anonymous";
+}
+
