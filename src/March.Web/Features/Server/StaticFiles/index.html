@@ -15,7 +15,7 @@
 <body>
 
     <div id="app"
-         hx-get="app"
+         hx-get="/app"
          hx-trigger="revealed"
          hx-swap="outerHTML"
          hx-indicator="#loadingIndicator">
@@ -24,5 +24,20 @@
     <progress class="htmx-indicator" id="loadingIndicator"></progress>
 
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+    <script>
+        function handleClientSideRouting(evt) {
+            const targetElement = document.getElementById('mainContentArea');
+            if (targetElement && window.location.pathname !== '/') {
+                htmx.ajax('GET', window.location.pathname, {
+                    target: targetElement,
+                    swap: 'innerHTML',
+                    error: (err) => console.error('Failed to load content:', err)
+                });
+            }
+            document.body.removeEventListener('htmx:afterSwap', handleClientSideRouting);
+        }
+        document.body.addEventListener('htmx:afterSwap', handleClientSideRouting);
+    </script>
 </body>
 </html>

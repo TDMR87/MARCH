@@ -1,4 +1,4 @@
-﻿namespace March.Web.Features.Server.Authentication;
+﻿namespace March.Web.Features.Server.Auth;
 
 public static class Auth
 {
@@ -7,8 +7,10 @@ public static class Auth
         builder.Services.AddAuthentication(Constants.MarchAuthCookie)
             .AddCookie(Constants.MarchAuthCookie, options =>
             {
-                options.LoginPath = "/login"; // Redirect to this path for login
-                options.AccessDeniedPath = "/"; // Redirect to this path if access is denied
+                options.LoginPath = "/login";
+                options.AccessDeniedPath = "/";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
 
         builder.Services.AddAuthorization();

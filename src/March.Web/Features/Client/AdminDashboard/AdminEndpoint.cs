@@ -4,7 +4,7 @@ public class AdminEndpoint
 {
     public record Request();
 
-    public static IResult GetDashboard()
+    public static IResult GetDashboard(HttpRequest req)
     {
         return Component<AdminDashboard>();
     }

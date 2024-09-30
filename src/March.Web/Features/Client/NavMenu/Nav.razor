@@ -1,7 +1,12 @@
-﻿<div id="navMenu" class="column is-3" hx-get="nav" hx-trigger="login from:body, logout from:body" hx-target="this" hx-swap="outerHTML">
+﻿<div id="navMenu" 
+     class="column is-3" 
+     hx-get="/nav" 
+     hx-trigger="login from:body, logout from:body" 
+     hx-target="this" 
+     hx-swap="outerHTML">
 
     <span class="icon is-large block toggle-button" 
-          hx-post="nav" 
+          hx-post="/nav"
           hx-trigger="click" 
           hx-target="#navMenu" 
           hx-swap="outerHTML" 
@@ -22,7 +27,8 @@
         <p class="menu-label">General</p>
         <ul class="menu-list">
             <li>
-                <a hx-get="home" 
+                <a hx-get="/home"
+                   hx-push-url="true"
                    hx-trigger="click" 
                    hx-target="#mainContentArea" 
                    hx-swap="innerHTML"
@@ -31,7 +37,8 @@
                 </a>
             </li>
             <li>
-                <a hx-get="how-it-works" 
+                <a hx-get="/how-it-works"
+                   hx-push-url="true"
                    hx-trigger="click" 
                    hx-target="#mainContentArea" 
                    hx-swap="innerHTML"
@@ -44,7 +51,8 @@
         <p class="menu-label">Demo</p>
         <ul class="menu-list">
             <li>
-                <a hx-get="counter" 
+                <a hx-get="/counter"
+                   hx-push-url="true"
                    hx-trigger="click" 
                    hx-target="#mainContentArea" 
                    hx-swap="innerHTML" 
@@ -54,7 +62,8 @@
                 </a>
             </li>
             <li>
-                <a hx-get="form"
+                <a hx-get="/form"
+                   hx-push-url="true"
                    hx-trigger="click"
                    hx-target="#mainContentArea"
                    hx-swap="innerHTML"
@@ -71,7 +80,8 @@
             @if (HttpContextAccessor?.HttpContext?.User.Identity?.IsAuthenticated == false)
             {
                 <li>
-                    <a hx-get="login"
+                    <a hx-get="/login"
+                       hx-push-url="true"
                        hx-trigger="click"
                        hx-target="#mainContentArea"
                        hx-swap="innerHTML"
@@ -84,17 +94,19 @@
             else
             {
                 <li>
-                    <a hx-get="logout"
+                    <a hx-get="/logout"
+                       hx-push-url="/home"
                        hx-trigger="click"
                        hx-target="#mainContentArea"
                        hx-swap="innerHTML"
                        hx-ext='json-enc'
                        hx-on::before-request="toggleNavButton()">
-                       <b>Log out</b>
+                       Log out
                     </a>
                 </li>
                 <li>
-                    <a hx-get="admin/dashboard"
+                    <a hx-get="/admin/dashboard"
+                       hx-push-url="true"
                        hx-trigger="click"
                        hx-target="#mainContentArea"
                        hx-swap="innerHTML"

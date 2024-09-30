@@ -1,16 +1,23 @@
 ﻿namespace March.Web.Features.Server.Middleware;
 
-public class Redirect404Middleware(RequestDelegate next)
+public class HtmxRequestMiddleware(RequestDelegate next)
 {
     private readonly RequestDelegate _next = next;
 
     public async Task InvokeAsync(HttpContext context)
     {
-        await _next(context);
+        // Check if the request has the HX-Request header
+        var isHtmxRequest = context.Request.Headers.ContainsKey("hx-request");
 
-        if (context.Response.StatusCode == 404)
+        if (!isHtmxRequest)
         {
-            context.Response.Redirect("/");
+            // If it's not an HTMX request, serve index.html
+            context.Response.ContentType = "text/html";
+            await context.Response.SendFileAsync("Features/Server/StaticFiles/index.html");
+            return;
         }
+
+        // Call the next middleware in the pipeline
+        await _next(context);
     }
 }

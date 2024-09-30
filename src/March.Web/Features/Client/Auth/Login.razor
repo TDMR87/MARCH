@@ -1,5 +1,10 @@
-﻿<form hx-boost="true" hx-post="login" method='post' hx-ext='json-enc' hx-target="#mainContentArea">
-    
+﻿<form method='post'
+      hx-post="login"
+      hx-push-url="/"
+      hx-ext='json-enc'
+      hx-target="#mainContentArea"
+      onsubmit="setReturnUrl()">
+
     <p class="subtitle is-6">Login as administrator to get access to the admin dashboard</p>
     <p class="subtitle is-7">(Note: valid login credentials are "admin" and "test")</p>
 
@@ -15,6 +20,10 @@
             <input name="password" value="@Model.Password" class="input" type="password" placeholder="****">
         </div>
     </div>
+
+    <!-- Hidden field to store the return URL or any other query parameter -->
+    <input type="hidden" name="returnUrl" value="captureQueryParams()" id="returnUrl" />
+
     <br />
     <button class="button is-primary">Login</button>
     @if (ValidationContext.Errors.Any())
@@ -25,11 +34,27 @@
     }
 </form>
 
-@code 
+<script>
+    function setReturnUrl() {
+        // Get query parameter from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const returnUrl = urlParams.get('ReturnUrl');
+
+        // Set the value of the hidden input field
+        document.getElementById('returnUrl').value = returnUrl ? returnUrl : '/'; // Default to "/" if ReturnUrl is not present
+    }
+</script>
+
+@code
 {
     [Inject] public ValidationContext ValidationContext { get; set; } = new();
-
+    [Inject] public IHttpContextAccessor HttpContextAccessor { get; set; } = default!;
     [Parameter] public LoginFormModel Model { get; set; } = new();
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+    }
 
     public record LoginFormModel
     {
