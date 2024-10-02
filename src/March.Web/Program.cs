@@ -1,3 +1,5 @@
+using March.Web.Features.Server.Exceptions;
+
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
     Args = args,
@@ -10,6 +12,8 @@ builder.AddCorsFeature();
 builder.AddAuthFeature();
 builder.AddResponseCompressionFeature();
 builder.AddServerSideRenderingFeature();
+builder.AddGlobalExceptionHandlingFeature();
+
 builder.Services.AddScoped<ValidationContext>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<FeatureFlagService>();
@@ -17,6 +21,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 // Use server features
 var app = builder.Build();
+app.UseGlobalExceptionHandlingFeature();
 app.UseCorsFeature();
 app.UseStaticFilesFeature();
 app.UseHttpsRedirection();

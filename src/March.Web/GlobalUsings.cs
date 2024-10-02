@@ -30,3 +30,5 @@ global using Microsoft.AspNetCore.Http.HttpResults;
 global using Microsoft.AspNetCore.ResponseCompression;
 global using Microsoft.AspNetCore.Authentication;
 global using System.Security.Claims;
+global using Microsoft.AspNetCore.Diagnostics;
+global using Microsoft.AspNetCore.Mvc;
