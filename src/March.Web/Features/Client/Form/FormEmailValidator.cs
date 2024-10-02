@@ -1,8 +1,9 @@
 ﻿namespace March.Web.Features.Client.Form;
 
-public class FormEmailValidator : AbstractValidator<FormEndpoint.EmailValidationRequest>
+public class EmailValidator : ValidatorBase<EmailValidator, FormEndpoint.EmailValidationRequest>
 {
-    public FormEmailValidator()
+    public EmailValidator(ILogger<EmailValidator> logger, ValidationContext validationContext) 
+        : base(logger, validationContext)
     {
         RuleFor(x => x.Email)
             .EmailAddress()
@@ -10,9 +11,3 @@ public class FormEmailValidator : AbstractValidator<FormEndpoint.EmailValidation
             .WithMessage("Not a valid email address");
     }
 }
-
-public class EmailValidator(
-    ILogger<EmailValidator> logger,
-    IValidator<FormEndpoint.EmailValidationRequest> validator,
-    ValidationContext validationContext)
-    : ValidatorBase<FormEndpoint.EmailValidationRequest>(logger, validator, validationContext);

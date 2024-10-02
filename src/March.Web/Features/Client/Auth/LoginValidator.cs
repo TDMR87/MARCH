@@ -1,8 +1,9 @@
 ﻿namespace March.Web.Features.Client.Authentication;
 
-public class LoginFormValidator : AbstractValidator<LoginEndpoint.LoginRequest>
+public class LoginValidator : ValidatorBase<LoginValidator, LoginEndpoint.LoginRequest>
 {
-    public LoginFormValidator()
+    public LoginValidator(ILogger<LoginValidator> logger, ValidationContext validationContext)
+        : base(logger, validationContext)
     {
         RuleFor(x => x.Username)
             .Equal("admin")
@@ -13,9 +14,3 @@ public class LoginFormValidator : AbstractValidator<LoginEndpoint.LoginRequest>
             .WithMessage("Password is not valid");
     }
 }
-
-public class LoginValidator(
-ILogger<LoginValidator> logger,
-IValidator<LoginEndpoint.LoginRequest> validator,
-ValidationContext validationContext)
-: ValidatorBase<LoginEndpoint.LoginRequest>(logger, validator, validationContext);

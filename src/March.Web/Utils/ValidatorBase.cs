@@ -1,6 +1,7 @@
 ﻿namespace March.Web.Utils;
 
-public class ValidatorBase<TRequest>(ILogger<ValidatorBase<TRequest>> logger, IValidator<TRequest> validator, ValidationContext validationContext) : IEndpointFilter
+public class ValidatorBase<TValidator, TRequest>(ILogger<TValidator> logger, ValidationContext validationContext) 
+    : AbstractValidator<TRequest>, IEndpointFilter
 {
     public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
@@ -13,7 +14,7 @@ public class ValidatorBase<TRequest>(ILogger<ValidatorBase<TRequest>> logger, IV
             return Results.Problem("Invalid request model");
         }
 
-        var validationResult = await validator.ValidateAsync(requestModel);
+        var validationResult = await ValidateAsync(requestModel);
         validationContext.ValidationResults = validationResult;
 
         return await next(context);
