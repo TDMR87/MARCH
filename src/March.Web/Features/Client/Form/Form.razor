@@ -1,12 +1,28 @@
-﻿<div id="inputForm">
+﻿<form 
+    id="inputForm"
+    method='post'
+    hx-post="form/submit"
+    hx-ext='json-enc'
+    hx-target="#mainContentArea">
 
     <p class="subtitle is-6">See form validation in action by entering an invalid email</p>
 
     <div class="field">
-        <label class="label">Name</label>
+        <label class="label">
+            Name
+        </label>
         <div class="control">
-            <input class="input" type="text" placeholder="e.g John Doe">
+            <input 
+                name="@(nameof(Model.Name))" 
+                value="@Model.Name"
+                class="input" 
+                type="text" 
+                placeholder="e.g John Doe">
         </div>
+        @if (ValidationContext.TryGetError(nameof(Model.Name), out var error))
+        {
+            <p class="has-text-danger">@error.ErrorMessage</p>
+        }
     </div>
 
     <FormEmail Model="Model" />
@@ -21,10 +37,11 @@
             Submit
         </button>
     </div>
-</div>
+</form>
 
 @code
 {
+    [Inject] public ValidationContext ValidationContext { get; set; } = new();
     [Parameter] public FormModel Model { get; set; } = new();
 
     public record FormModel

@@ -49,4 +49,13 @@ public static class Extensions
 
     public static RazorComponentResult Component<TComponent>() 
         where TComponent : IComponent => new RazorComponentResult<TComponent>();
+
+    public static bool TryGetError(
+        this ValidationContext validationContext, 
+        string PropertyName, 
+        out ValidationFailure error)
+    {
+        error = validationContext.Errors.FirstOrDefault(x => x.PropertyName == PropertyName)!;
+        return error is not null;
+    }
 }

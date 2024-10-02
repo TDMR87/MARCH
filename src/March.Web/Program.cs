@@ -81,6 +81,12 @@ routes.AddRoutePath(HTTP.POST, "/form/submit", FormEndpoint.SubmitForm)
       .AllowAnonymous()
       .WithSummary("Submit an input form");
 
+routes.AddRoutePath(HTTP.POST, "/form/submitted", FormEndpoint.ToggleFormSubmittedModal)
+      .Produces<RazorComponentResult<FormSubmitted>>()
+      .WithFeatureFlags(FeatureFlag.FormSubmit)
+      .AllowAnonymous()
+      .WithSummary("Toggle a form submitted modal");
+
 routes.AddRoutePath(HTTP.POST, "/form/email", FormEndpoint.ValidateEmail)
       .Produces<RazorComponentResult<FormEmail>>()
       .WithValidation<EmailValidator>()

@@ -10,33 +10,14 @@ public class FormFieldsValidator : AbstractValidator<FormEndpoint.FormSubmitRequ
 
         RuleFor(x => x.Email)
            .NotEmpty()
-           .WithMessage("Email is required");
-
-        RuleFor(x => x.Email)
+           .WithMessage("Email is required")
            .EmailAddress()
            .WithMessage("Not a valid email address");
     }
 }
 
-public class FormEmailValidator : AbstractValidator<FormEndpoint.EmailValidationRequest>
-{
-    public FormEmailValidator()
-    {
-        RuleFor(x => x.Email)
-            .EmailAddress()
-            .When(x => !string.IsNullOrWhiteSpace(x.Email))
-            .WithMessage("Not a valid email address");
-    }
-}
-
 public class FormValidator(
-    ILogger<FormValidator> logger, 
+    ILogger<FormValidator> logger,
     IValidator<FormEndpoint.FormSubmitRequest> validator,
-    ValidationContext validationContext) 
+    ValidationContext validationContext)
     : ValidatorBase<FormEndpoint.FormSubmitRequest>(logger, validator, validationContext);
-
-public class EmailValidator(
-    ILogger<EmailValidator> logger, 
-    IValidator<FormEndpoint.EmailValidationRequest> validator, 
-    ValidationContext validationContext) 
-    : ValidatorBase<FormEndpoint.EmailValidationRequest>(logger, validator, validationContext);

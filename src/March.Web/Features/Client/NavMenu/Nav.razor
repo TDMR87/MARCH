@@ -11,7 +11,7 @@
           hx-target="#navMenu" 
           hx-swap="outerHTML" 
           hx-ext='json-enc' 
-          hx-vals='{"IsCollapsed": @Model.IsCollapsed.ToString().ToLower()}'>
+          hx-vals='@Model.ToJson()'>
         @if (Model.IsCollapsed)
         {
             <i class="fas fa-bars"></i>
@@ -142,5 +142,6 @@
     public class NavModel
     {
         public bool IsCollapsed { get; set; }
+        public string ToJson() => JsonSerializer.Serialize(this);
     }
 }

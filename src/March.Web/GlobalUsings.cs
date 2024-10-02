@@ -5,6 +5,7 @@ global using static March.Web.Features.Client.Counter.Counter;
 global using static March.Web.Features.Client.Auth.Login;
 global using static March.Web.Features.Client.Form.Form;
 global using static March.Web.Features.Client.NavMenu.Nav;
+global using static March.Web.Features.Client.Form.FormSubmitted;
 global using March.Web;
 global using March.Web.Utils;
 global using March.Web.Features.Client.Counter;

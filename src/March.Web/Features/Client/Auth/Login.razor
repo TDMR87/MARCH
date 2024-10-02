@@ -11,18 +11,29 @@
     <div class="field">
         <label class="label">Name</label>
         <div class="control">
-            <input name="username" value="@Model.Username" class="input" type="text" placeholder="e.g admin">
+            <input 
+                name="username" 
+                value="@Model.Username" 
+                class="input" 
+                type="text" 
+                placeholder="e.g admin">
         </div>
     </div>
     <div class="field">
         <label class="label">Password</label>
         <div class="control">
-            <input name="password" value="@Model.Password" class="input" type="password" placeholder="****">
+            <input 
+                name="password" 
+                value="@Model.Password" 
+                class="input" 
+                type="password" 
+                placeholder="****">
         </div>
     </div>
 
-    <!-- Hidden field to store the return URL or any other query parameter -->
-    <input type="hidden" name="returnUrl" value="captureQueryParams()" id="returnUrl" />
+    <!-- Hidden field to store the return URL so that the 
+         user can be redirected back to the page they were on -->
+    <input type="hidden" name="returnUrl" id="returnUrl" />
 
     <br />
     <button class="button is-primary">Login</button>
@@ -36,25 +47,16 @@
 
 <script>
     function setReturnUrl() {
-        // Get query parameter from URL
         const urlParams = new URLSearchParams(window.location.search);
         const returnUrl = urlParams.get('ReturnUrl');
-
-        // Set the value of the hidden input field
-        document.getElementById('returnUrl').value = returnUrl ? returnUrl : '/'; // Default to "/" if ReturnUrl is not present
+        document.getElementById('returnUrl').value = returnUrl ? returnUrl : '/';
     }
 </script>
 
 @code
 {
     [Inject] public ValidationContext ValidationContext { get; set; } = new();
-    [Inject] public IHttpContextAccessor HttpContextAccessor { get; set; } = default!;
     [Parameter] public LoginFormModel Model { get; set; } = new();
-
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-    }
 
     public record LoginFormModel
     {

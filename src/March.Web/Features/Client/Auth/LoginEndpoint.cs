@@ -1,5 +1,4 @@
-﻿
-namespace March.Web.Features.Client.Authentication;
+﻿namespace March.Web.Features.Client.Authentication;
 
 public class LoginEndpoint
 {

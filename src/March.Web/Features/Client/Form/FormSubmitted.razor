@@ -1,0 +1,31 @@
+﻿<div class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <section class="modal-card-body">
+            <p>Form submitted!</p>
+        </section>
+        <footer class="modal-card-foot">
+            <div class="buttons">
+                <button 
+                    class="button is-success"
+                    hx-post="form/submitted"
+                    hx-target="#mainContentArea"
+                    hx-ext="json-enc"
+                    hx-vals='@((Model with { Toggle = false }).ToJson())}'>
+                Close
+            </button>
+            </div>
+        </footer>
+    </div>
+</div>
+
+@code 
+{
+    [Parameter] public FormSubmittedModel Model { get; set; } = new();
+
+    public record FormSubmittedModel
+    {
+        public bool Toggle { get; set; }
+        public string ToJson() => JsonSerializer.Serialize(this);
+    }
+}

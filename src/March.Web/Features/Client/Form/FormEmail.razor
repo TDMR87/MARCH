@@ -1,25 +1,23 @@
 ﻿<div class="field" hx-target="this" hx-swap="outerHTML">
     <label class="label">Email</label>
     <div class="control">
-        <input class="input"
-               type="email"
-               name="email"
-               value="@Model.Email"
-               placeholder="e.g. john.doe@email.com"
-               hx-post="form/email"
-               hx-ext='json-enc'>
+        <input 
+            name="@nameof(Model.Email)"
+            class="input"
+            type="email"
+            value="@Model.Email"
+            placeholder="e.g. john.doe@email.com"
+            hx-post="form/email"
+            hx-ext='json-enc'>
     </div>
-    @if (ValidationContext.Errors.Any(e => e.PropertyName == nameof(Model.Email)))
+    @if (ValidationContext.TryGetError(nameof(Model.Email), out var error))
     {
-        <p class="has-text-danger">@ValidationContext.ValidationResults.Errors.First(
-            e => e.PropertyName == nameof(Model.Email)).ErrorMessage
-        </p>
+        <p class="has-text-danger">@error.ErrorMessage</p>
     }
 </div>
 
 @code 
 {
     [Inject] public ValidationContext ValidationContext { get; set; } = new();
-
     [Parameter] public FormModel Model { get; set; } = new();
 }
