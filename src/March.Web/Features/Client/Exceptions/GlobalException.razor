@@ -1,0 +1,25 @@
+﻿<div id="globalExceptionModal" class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">An exception occurred</p>
+            <button onclick="closeErrorModal()" class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            <p>@Model.Message</p>
+        </section>
+        <footer class="modal-card-footer">
+            <button onclick="closeErrorModal()" class="button">Close</button>
+        </footer>
+    </div>
+</div>
+
+@code {
+    [Parameter] public GlobalExceptionModel Model { get; set; } = new();
+
+    public record GlobalExceptionModel
+    {
+        public string? Message { get; set; }
+        public string ToJson() => JsonSerializer.Serialize(this);
+    }
+}

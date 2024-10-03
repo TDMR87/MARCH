@@ -6,6 +6,7 @@
     <title>MARCH (Minimal APIs, Razor Components & HTMX)</title>
     <script src="https://unpkg.com/htmx.org@2.0.2"></script>
     <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/json-enc.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <link rel="stylesheet" href="App.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -13,6 +14,8 @@
     </style>
 </head>
 <body>
+
+    <div id="error"></div>
 
     <div id="app"
          hx-get="/app"
@@ -23,10 +26,12 @@
 
     <progress class="htmx-indicator" id="loadingIndicator"></progress>
 
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-
     <script>
-        function handleClientSideRouting(evt) {
+        function closeErrorModal() {
+            document.getElementById('globalExceptionModal').classList.remove('is-active');
+        }
+
+        function getRouteContentsFromServer(evt) {
             const targetElement = document.getElementById('mainContentArea');
             if (targetElement && window.location.pathname !== '/') {
                 htmx.ajax('GET', window.location.pathname, {
@@ -35,9 +40,14 @@
                     error: (err) => console.error('Failed to load content:', err)
                 });
             }
-            document.body.removeEventListener('htmx:afterSwap', handleClientSideRouting);
+            document.body.removeEventListener('htmx:afterSwap', getRouteContentsFromServer);
         }
-        document.body.addEventListener('htmx:afterSwap', handleClientSideRouting);
+
+        document.body.addEventListener('htmx:afterSwap', getRouteContentsFromServer);
+
+        document.body.addEventListener('htmx:responseError', function (event) {
+            document.getElementById('error').innerHTML = event.detail.xhr.response;
+        });
     </script>
 </body>
 </html>

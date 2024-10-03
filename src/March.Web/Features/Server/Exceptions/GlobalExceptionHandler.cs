@@ -1,6 +1,8 @@
 ﻿namespace March.Web.Features.Server.Exceptions;
 
-internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
+internal sealed class GlobalExceptionHandler(
+    ILogger<GlobalExceptionHandler> logger, 
+    IHostEnvironment environment)
     : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(
@@ -10,14 +12,18 @@ internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> log
     {
         logger.LogError(exception, "Exception occurred: {Message}", exception.Message);
 
-        var problemDetails = new ProblemDetails
-        {
-            Status = StatusCodes.Status500InternalServerError,
-            Title = "Server error"
-        };
+        httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        httpContext.Response.ContentType = "text/html";
 
-        httpContext.Response.StatusCode = problemDetails.Status.Value;
-        await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
+        await Component<GlobalException, GlobalExceptionModel>
+        (
+            model: new() 
+            { 
+                Message = environment.IsProduction()
+                    ? "Something went wrong."
+                    : exception.ToString()
+            }
+        ).ExecuteAsync(httpContext);
 
         return true;
     }
