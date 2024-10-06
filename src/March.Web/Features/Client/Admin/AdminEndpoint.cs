@@ -1,4 +1,4 @@
-﻿namespace March.Web.Features.Client.AdminDashboard;
+﻿namespace March.Web.Features.Client.Admin;
 
 public class AdminEndpoint
 {

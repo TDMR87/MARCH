@@ -2,18 +2,18 @@
 
 public class NavEndpoint
 {
-    public record Request(string IsCollapsed);
+    public record Request(bool IsCollapsed);
 
     public static IResult GetNav()
     {
-        return Component<Nav>();
+        return Component<NavItems>();
     }
 
     public static IResult ToggleNav(Request request)
     {
-        return Component<Nav, NavModel>(model: new()
+        return Component<NavItems, NavModel>(model: new()
         {
-            IsCollapsed = !bool.Parse(request.IsCollapsed)
+            IsCollapsed = request.IsCollapsed
         });
     }
 }

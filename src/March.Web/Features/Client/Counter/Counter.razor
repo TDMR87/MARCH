@@ -1,44 +1,48 @@
 ﻿<div id="counter">
-
-    <p class="title is-4">Counter</p>
-    <p class="subtitle is-5">Increase or decrease the value to see validation messages.</p>
-
-    <div class="is-flex is-flex-direction-row is-align-items-center">
-        <button class="button is-medium" 
+    <div class="flex flex-column mt-6">
+        <!-- Decrement Button -->
+        <button class="p-3 rounded-md bg-cyan-600 hover:bg-cyan-700 dark:bg-sky-900 dark:hover:bg-sky-800"
                 hx-post="counter/decrement"
                 hx-trigger="click"
                 hx-target="#counter"
                 hx-swap="outerHTML"
                 hx-ext='json-enc'
                 hx-vals='@((Model with { Count = Model.Count - 1 }).ToJson())'>
-            <span class="icon is-medium">
+            <span class="text-xl">
                 <i class="fas fa-arrow-left"></i>
             </span>
         </button>
-        <div class="p-3">
-            <span class="title is-2">
+
+        <!-- Counter Value -->
+        <div class="px-2 w-24 text-center">
+            <span class="text-5xl font-bold">
                 @Model.Count
             </span>
         </div>
-        <button class="button is-medium"
+
+        <!-- Increment Button -->
+        <button class="p-3 rounded-md bg-cyan-600 hover:bg-cyan-700 dark:bg-sky-900 dark:hover:bg-sky-800"
                 hx-post="counter/increment"
                 hx-trigger="click"
                 hx-target="#counter"
                 hx-swap="outerHTML"
                 hx-ext='json-enc'
                 hx-vals='@((Model with { Count = Model.Count + 1 }).ToJson())'>
-            <span class="icon is-medium">
+            <span class="text-xl">
                 <i class="fas fa-arrow-right"></i>
             </span>
         </button>
     </div>
+
+    <!-- Validation Message -->
     @if (ValidationContext.Errors.Any(e => e.PropertyName == nameof(Model.Count)))
     {
-        <p class="has-text-danger">@ValidationContext.ValidationResults.Errors.First(
-            e => e.PropertyName == nameof(Model.Count)).ErrorMessage
+        <p class="text-red-500 mt-4">
+            @ValidationContext.ValidationResults.Errors.First(e => e.PropertyName == nameof(Model.Count)).ErrorMessage
         </p>
     }
 </div>
+
 
 @code
 {

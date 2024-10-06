@@ -1,17 +1,27 @@
-﻿<section class="section" style="min-height:85%;">
-    <div class="container">
-        <div class="columns">
-            <Nav />
-            <div class="column is-9">
-                <Hero />
-                <section class="section">
-                    <div id="mainContentArea" class="content">
+﻿<div class="flex flex-col min-h-screen">
+    <NavBar />
+    <section class="flex-grow py-8">
+        <div class="max-w-screen-lg mx-auto">
+            <div class="flex flex-col md:flex-row">
+                <nav class="w-full md:w-1/5">
+                    <NavItems />
+                </nav>
+                <div class="w-full md:w-4/5">
+                    <div class="p-8">
+                        <Hero />
+                    </div>
+                    <div class="p-12" id="mainContentArea">
                         <Home />
                     </div>
-                </section>
+                </div>
             </div>
         </div>
-    </div>
-</section>
-
-<Footer />
+    </section>
+    <footer class="py-4">
+        <div class="flex text-center justify-center">
+            <p>
+                Diego Rönkkömäki-Tapia &copy; All rights reserved.
+            </p>
+        </div>
+    </footer>
+</div>

@@ -1,38 +1,21 @@
-﻿<div id="navMenu" 
-     class="column is-3" 
-     hx-get="/nav" 
+﻿<div id="navItems" 
+     class="w-full md:w-4/4 p-4" 
+     hx-get="/nav-items" 
      hx-trigger="login from:body, logout from:body" 
      hx-target="this" 
      hx-swap="outerHTML">
 
-    <span class="icon is-large block toggle-button" 
-          hx-post="/nav"
-          hx-trigger="click" 
-          hx-target="#navMenu" 
-          hx-swap="outerHTML" 
-          hx-ext='json-enc' 
-          hx-vals='@Model.ToJson()'>
-        @if (Model.IsCollapsed)
-        {
-            <i class="fas fa-bars"></i>
-        }
-        else
-        {
-            <i class="fas fa-times"></i>
-        }
-    </span>
-
-    <aside class="menu" id="side-menu" style="display: @(Model.IsCollapsed ? "none" : string.Empty)">
-
-        <p class="menu-label">General</p>
-        <ul class="menu-list">
+    <aside id="side-menu" class="menu" hidden="@(Model.IsCollapsed)">
+        <p class="font-bold text-sm mb-2">GENERAL</p>
+        <ul class="space-y-2">
             <li>
                 <a hx-get="/home"
                    hx-push-url="true"
                    hx-trigger="click" 
                    hx-target="#mainContentArea" 
                    hx-swap="innerHTML"
-                   hx-on::before-request="toggleNavButton()">
+                   hx-on::before-request="toggleNavButton()"
+                   class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
                    Home
                 </a>
             </li>
@@ -42,14 +25,15 @@
                    hx-trigger="click" 
                    hx-target="#mainContentArea" 
                    hx-swap="innerHTML"
-                   hx-on::before-request="toggleNavButton()">
+                   hx-on::before-request="toggleNavButton()"
+                   class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
                    How it works
                 </a>
             </li>
         </ul>
 
-        <p class="menu-label">Demo</p>
-        <ul class="menu-list">
+        <p class="font-bold text-sm mb-2 mt-5">DEMO</p>
+        <ul class="space-y-2">
             <li>
                 <a hx-get="/counter"
                    hx-push-url="true"
@@ -57,7 +41,8 @@
                    hx-target="#mainContentArea" 
                    hx-swap="innerHTML" 
                    hx-ext='json-enc'
-                   hx-on::before-request="toggleNavButton()">
+                   hx-on::before-request="toggleNavButton()"
+                   class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
                    Counter
                 </a>
             </li>
@@ -68,15 +53,15 @@
                    hx-target="#mainContentArea"
                    hx-swap="innerHTML"
                    hx-ext='json-enc'
-                   hx-on::before-request="toggleNavButton()">
-                    Form
+                   hx-on::before-request="toggleNavButton()"
+                   class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
+                   Form
                 </a>
             </li>
-            
         </ul>
 
-        <p class="menu-label">Auth</p>
-        <ul class="menu-list">
+        <p class="font-bold text-sm mb-2 mt-5">AUTH</p>
+        <ul class="space-y-2">
             @if (HttpContextAccessor?.HttpContext?.User.Identity?.IsAuthenticated == false)
             {
                 <li>
@@ -86,7 +71,8 @@
                        hx-target="#mainContentArea"
                        hx-swap="innerHTML"
                        hx-ext='json-enc'
-                       hx-on::before-request="toggleNavButton()">
+                       hx-on::before-request="toggleNavButton()"
+                       class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
                        <b>Log in</b>
                     </a>
                 </li>
@@ -100,7 +86,8 @@
                        hx-target="#mainContentArea"
                        hx-swap="innerHTML"
                        hx-ext='json-enc'
-                       hx-on::before-request="toggleNavButton()">
+                       hx-on::before-request="toggleNavButton()"
+                       class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
                        Log out
                     </a>
                 </li>
@@ -111,7 +98,8 @@
                        hx-target="#mainContentArea"
                        hx-swap="innerHTML"
                        hx-ext='json-enc'
-                       hx-on::before-request="toggleNavButton()">
+                       hx-on::before-request="toggleNavButton()"
+                       class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
                        Admin dashboard
                     </a>
                 </li>
@@ -120,13 +108,14 @@
     </aside>
 </div>
 
+
 <script>
     function isSmallScreen() {
         return window.matchMedia("(max-width: 768px)").matches;
     }
 
     function toggleNavButton() {
-        const navButton = document.querySelector('.toggle-button');
+        const navButton = document.getElementById('navMenuButton');
         if (isSmallScreen() && navButton) {
             navButton.click();
         }

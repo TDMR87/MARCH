@@ -7,13 +7,15 @@
     <script src="https://unpkg.com/htmx.org@2.0.2"></script>
     <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/json-enc.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <link rel="stylesheet" href="App.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-    </style>
+    <script>
+        tailwind.config = {
+            darkMode: 'selector'
+        }
+    </script>
 </head>
-<body>
+<body class="bg-gray-200 text-gray-800 dark:bg-gray-800 dark:text-stone-300">
 
     <div id="error"></div>
 
@@ -26,28 +28,7 @@
 
     <progress class="htmx-indicator" id="loadingIndicator"></progress>
 
-    <script>
-        function closeErrorModal() {
-            document.getElementById('globalExceptionModal').classList.remove('is-active');
-        }
+    <script src="App.js"></script>
 
-        function getRouteContentsFromServer(evt) {
-            const targetElement = document.getElementById('mainContentArea');
-            if (targetElement && window.location.pathname !== '/') {
-                htmx.ajax('GET', window.location.pathname, {
-                    target: targetElement,
-                    swap: 'innerHTML',
-                    error: (err) => console.error('Failed to load content:', err)
-                });
-            }
-            document.body.removeEventListener('htmx:afterSwap', getRouteContentsFromServer);
-        }
-
-        document.body.addEventListener('htmx:afterSwap', getRouteContentsFromServer);
-
-        document.body.addEventListener('htmx:responseError', function (event) {
-            document.getElementById('error').innerHTML = event.detail.xhr.response;
-        });
-    </script>
 </body>
 </html>

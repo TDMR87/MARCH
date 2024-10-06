@@ -12,12 +12,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Features\Server\StaticFiles\img\code-snippet-1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Features\Server\StaticFiles\index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\Client\NavMenu\" />
+    <Folder Include="Features\Server\StaticFiles\img\" />
   </ItemGroup>
 
 </Project>

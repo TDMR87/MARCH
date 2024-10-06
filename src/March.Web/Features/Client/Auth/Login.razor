@@ -1,49 +1,44 @@
-﻿<form method='post'
+﻿<form method="post"
       hx-post="login"
       hx-push-url="/"
-      hx-ext='json-enc'
+      hx-ext="json-enc"
       hx-target="#mainContentArea"
       onsubmit="setReturnUrl()">
 
-    <p class="subtitle is-6">Login as administrator to get access to the admin dashboard</p>
-    <p class="subtitle is-7">(Note: valid login credentials are "admin" and "test")</p>
+    <p class="text-lg text-gray-600">Login as administrator to get access to the admin dashboard</p>
+    <p class="text-sm text-gray-500">(Note: valid login credentials are "admin" and "test")</p>
 
-    <div class="field">
-        <label class="label">Name</label>
-        <div class="control">
-            <input 
-                name="username" 
-                value="@Model.Username" 
-                class="input" 
-                type="text" 
-                placeholder="e.g admin">
-        </div>
-    </div>
-    <div class="field">
-        <label class="label">Password</label>
-        <div class="control">
-            <input 
-                name="password" 
-                value="@Model.Password" 
-                class="input" 
-                type="password" 
-                placeholder="****">
-        </div>
+    <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2">Name</label>
+        <input name="username"
+               value="@Model.Username"
+               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
+               type="text"
+               placeholder="e.g admin">
     </div>
 
-    <!-- Hidden field to store the return URL so that the 
-         user can be redirected back to the page they were on -->
+    <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2">Password</label>
+        <input name="password"
+               value="@Model.Password"
+               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
+               type="password"
+               placeholder="****">
+    </div>
+
+    <!-- Hidden field to store the return URL -->
     <input type="hidden" name="returnUrl" id="returnUrl" />
 
-    <br />
-    <button class="button is-primary">Login</button>
+    <button class="px-4 py-2 text-white font-bold rounded-md bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500">
+        Login
+    </button>
+
     @if (ValidationContext.Errors.Any())
     {
-        <p class="has-text-danger">
-            Login failed
-        </p>
+        <p class="text-red-500 mt-4">Login failed</p>
     }
 </form>
+
 
 <script>
     function setReturnUrl() {

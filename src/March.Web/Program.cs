@@ -6,6 +6,12 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     WebRootPath = "Features/Server/StaticFiles",
 });
 
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(new StringToBooleanConverter());
+    options.SerializerOptions.PropertyNameCaseInsensitive = true;
+});
+
 // Add server features
 builder.AddLoggingFeature();
 builder.AddCorsFeature();
@@ -38,13 +44,13 @@ routes.AddRoutePath(HTTP.GET, "/home", HomeEndpoint.GetHome)
       .AllowAnonymous()
       .WithSummary("Get the home page content");
 
-routes.AddRoutePath(HTTP.GET, "/nav", NavEndpoint.GetNav)
-      .Produces<RazorComponentResult<Nav>>()
+routes.AddRoutePath(HTTP.GET, "/nav-items", NavEndpoint.GetNav)
+      .Produces<RazorComponentResult<NavItems>>()
       .AllowAnonymous()
       .WithSummary("Get the navigation menu");
 
-routes.AddRoutePath(HTTP.POST, "/nav", NavEndpoint.ToggleNav)
-      .Produces<RazorComponentResult<Nav>>()
+routes.AddRoutePath(HTTP.POST, "/nav-items", NavEndpoint.ToggleNav)
+      .Produces<RazorComponentResult<NavItems>>()
       .AllowAnonymous()
       .WithSummary("Open and close a navigation menu");
 

@@ -1,6 +1,57 @@
-﻿<p class="title is-4">How it works</p>
-<p class="subtitle is-5">How the application functions under the hood</p>
+﻿<article class="prose lg:prose-xl">
 
-@code {
+    <h1 class="text-xl font-bold">How it works</h1>
 
-}
+    <br />
+
+    <p>
+        MARCH leans heavily on the <b>vertical slice</b> architecture and the concept of '<b>features</b>'.
+        Let's have a look at how the classic <b>Counter component</b> is implemented with MARCH, in order 
+        to see how Minimal APIs, Razor Components and HTMX come together.
+
+        <br />
+        <br />
+        <b>Note:</b> you can find the source code for the 
+        <a class="text-gray-500 dark:text-orange-300" href="">
+            Counter component
+        </a>
+        demo
+        in the project's 
+        <a class="text-gray-500 dark:text-teal-300" href="">
+            GitHub
+        </a> page.
+    </p>
+
+    <br />
+
+    <section class="rounded-lg p-4 shadow-lg bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-300">
+        <h1 class="text-lg font-bold">
+            <i>Wait a minute, isn't this </i>
+            <a class="text-gray-500 dark:text-pink-300" href="https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor">
+                Blazor
+            </a>? 
+            &#129300;
+        </h1>
+
+        <br />
+
+        <p>
+            <b>Nope.</b> Even though technologies like .NET, C# and Razor Components are utilized in this stack,
+            Blazor does not play a role here at all. In fact, even though Blazor could very well be
+            integrated into a MARCH stack, MARCH deliberately avoids having Blazor as a dependency for simplicity's sake.
+        </p>
+    </section>
+
+    <br />
+
+    <p>
+        1. Under <b>Features > Client</b> you can find all the code that is part of the Counter feature.
+    </p>
+
+    <br />
+    
+
+    <br />
+
+    
+</article>

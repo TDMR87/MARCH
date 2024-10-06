@@ -1,20 +1,19 @@
-﻿<div class="field" hx-target="this" hx-swap="outerHTML">
-    <label class="label">Email</label>
-    <div class="control">
-        <input 
-            name="@nameof(Model.Email)"
-            class="input"
-            type="email"
-            value="@Model.Email"
-            placeholder="e.g. john.doe@email.com"
-            hx-post="form/email"
-            hx-ext='json-enc'>
+﻿<div class="mb-4" hx-target="this" hx-swap="outerHTML">
+    <label class="block font-bold mb-2" for="email">Email</label>
+    <div class="relative">
+        <input name="@nameof(Model.Email)"
+               class="w-full p-3 border border-gray-300 rounded-md focus:outline-none"
+               type="email"
+               value="@Model.Email"
+               placeholder="e.g. john.doe@email.com"
+               hx-post="form/email"
+               hx-ext='json-enc'>
     </div>
     @if (ValidationContext.TryGetError(nameof(Model.Email), out var error))
     {
-        <p class="has-text-danger">@error.ErrorMessage</p>
+        <p class="text-red-600 text-sm mt-2">@error.ErrorMessage</p>
     }
-</div>
+</div>  
 
 @code 
 {

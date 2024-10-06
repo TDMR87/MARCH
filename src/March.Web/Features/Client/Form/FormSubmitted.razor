@@ -1,23 +1,23 @@
-﻿<div class="modal is-active">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-        <section class="modal-card-body">
-            <p>Form submitted!</p>
-        </section>
-        <footer class="modal-card-foot">
-            <div class="buttons">
-                <button 
-                    class="button is-success"
+﻿<div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md">
+        <!-- Modal Content -->
+        <div class="p-6">
+            <p class="text-gray-700 text-lg">Form submitted!</p>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="p-4 bg-gray-100 rounded-b-lg flex justify-end">
+            <button class="px-4 py-2 bg-sky-500 text-white font-semibold rounded-md hover:bg-sky-600"
                     hx-post="form/submitted"
                     hx-target="#mainContentArea"
                     hx-ext="json-enc"
                     hx-vals='@((Model with { Toggle = false }).ToJson())}'>
                 Close
             </button>
-            </div>
-        </footer>
+        </div>
     </div>
 </div>
+
 
 @code 
 {

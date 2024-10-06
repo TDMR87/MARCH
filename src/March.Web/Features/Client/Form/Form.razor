@@ -1,43 +1,44 @@
-﻿<form 
-    id="inputForm"
-    method='post'
-    hx-post="form/submit"
-    hx-ext='json-enc'
-    hx-target="#mainContentArea">
+﻿<form id="inputForm"
+      method="post"
+      hx-post="form/submit"
+      hx-ext="json-enc"
+      hx-target="#mainContentArea"
+      class="space-y-6">
 
-    <p class="subtitle is-6">See form validation in action by entering an invalid email</p>
-
-    <div class="field">
-        <label class="label">
+    <!-- Name Field -->
+    <div class="mb-4">
+        <label class="block font-bold mb-2">
             Name
         </label>
-        <div class="control">
-            <input 
-                name="@(nameof(Model.Name))" 
-                value="@Model.Name"
-                class="input" 
-                type="text" 
-                placeholder="e.g John Doe">
+        <div class="relative">
+            <input name="@(nameof(Model.Name))"
+                   value="@Model.Name"
+                   class="w-full p-3 border border-gray-300 rounded-md focus:outline-none"
+                   type="text"
+                   placeholder="e.g. John Doe">
         </div>
         @if (ValidationContext.TryGetError(nameof(Model.Name), out var error))
         {
-            <p class="has-text-danger">@error.ErrorMessage</p>
+            <p class="text-red-600 text-sm mt-2">@error.ErrorMessage</p>
         }
     </div>
 
+    <!-- Email Field -->
     <FormEmail Model="Model" />
 
-    <div class="control">
-        <button class="button is-primary"
+    <!-- Submit Button -->
+    <div class="mt-4">
+        <button class="px-4 py-2 text-white font-bold rounded-md bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500"
                 hx-post="form/submit"
                 hx-trigger="click"
-                hx-ext='json-enc'
+                hx-ext="json-enc"
                 hx-target="#inputForm"
                 hx-swap="outerHTML">
             Submit
         </button>
     </div>
 </form>
+
 
 @code
 {
