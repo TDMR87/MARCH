@@ -5,21 +5,9 @@
     <br />
 
     <p>
-        MARCH leans heavily on the <b>vertical slice</b> architecture and the concept of '<b>features</b>'.
-        Let's have a look at how the classic <b>Counter component</b> is implemented with MARCH, in order 
-        to see how Minimal APIs, Razor Components and HTMX come together.
-
-        <br />
-        <br />
-        <b>Note:</b> you can find the source code for the 
-        <a class="text-gray-500 dark:text-orange-300" href="">
-            Counter component
-        </a>
-        demo
-        in the project's 
-        <a class="text-gray-500 dark:text-teal-300" href="">
-            GitHub
-        </a> page.
+        MARCH leans heavily on <b>vertical slice</b> architecture and the concept of <b>features</b>.
+        Let's have a look at how the classic <b>Counter component</b> is implemented in a MARCH project
+        and see how Minimal APIs, Razor Components and HTMX come together.
     </p>
 
     <br />
@@ -27,7 +15,7 @@
     <section class="rounded-lg p-4 shadow-lg bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-300">
         <h1 class="text-lg font-bold">
             <i>Wait a minute, isn't this </i>
-            <a class="text-gray-500 dark:text-pink-300" href="https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor">
+            <a class="text-gray-500 dark:text-pink-300 underline" href="https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor">
                 Blazor
             </a>? 
             &#129300;
@@ -36,22 +24,304 @@
         <br />
 
         <p>
-            <b>Nope.</b> Even though technologies like .NET, C# and Razor Components are utilized in this stack,
-            Blazor does not play a role here at all. In fact, even though Blazor could very well be
-            integrated into a MARCH stack, MARCH deliberately avoids having Blazor as a dependency for simplicity's sake.
+            <b>Nope.</b> Even though technologies like .NET, C# and Razor Components are utilized in this 
+            project,
+            Blazor does not play a role here at all. In fact, even though Blazor could be
+            integrated into a MARCH project, we deliberately avoid having Blazor as a dependency 
+            here in order to demonstrate the capibilities.
         </p>
     </section>
 
     <br />
 
     <p>
-        1. Under <b>Features > Client</b> you can find all the code that is part of the Counter feature.
+        If you're not already familiar with the technologies mentioned here, 
+        you might want to read about them on their respective pages. We are not explaining
+        these technologies and libraries in depth here, only how they are utilized in the 
+        MARCH project template.
+        <ul class="list-disc p-4">
+            <li>
+                <a class="text-bold underline" href="https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/overview?view=aspnetcore-8.0">
+                .NET Minimal APIs
+                </a>
+            </li>
+            <li>
+                <a class="text-bold underline" href="https://learn.microsoft.com/en-us/aspnet/core/blazor/components/?view=aspnetcore-8.0">
+                Razor Components
+                </a>
+            </li>
+            <li>
+                <a class="text-bold underline" href="https://htmx.org/">
+                    HTMX
+                </a>
+            </li>
+            <li>
+                <a class="text-bold underline" href="https://docs.fluentvalidation.net/en/latest/">
+                    FluentValidation
+                </a>
+            </li>
+        </ul>
+
+        <b>Note:</b> You can find the source code for the 
+        <a class="text-gray-500 dark:text-orange-300 underline" href="@(NavigationManager?.BaseUri + "counter")">
+            Counter component
+        </a>
+        (and for this whole website)
+        in the project's 
+        <a class="text-gray-500 dark:text-teal-300 underline" href="https://github.com/TDMR87/MARCH">
+            GitHub
+        </a> page.
     </p>
 
     <br />
-    
+
+    <p>
+        <b>1.</b> Under <b>Features > Client > Counter</b> folder you can find all the code
+        that belongs to the Counter feature.
+    </p>
+    <img src="img/march_1.png" class="rounded-lg shadow-lg" />
 
     <br />
 
+    <p>
+        <b>2.</b> <i>Counter.razor</i> is a Razor component and contains the HTML template for the counter.
+        Razor is a markup syntax for embedding .NET based code into webpages and 
+        it enables you to mix HTML and C# together, to make a dynamic reusable UI component.
+        Pretty much <b>everything</b> you can do in C#, you can do inside the markup: 
+        loops, if statements, LINQ, you name it.
+    </p>
+    <img src="img/march_2.png" class="rounded-lg shadow-lg" />
+
+    <br />
+
+    <p>
+        <b>3.</b> At the bottom of <i>Counter.razor</i> you can find the <b>@("@code { }")</b> block where you can use
+        component life-cycle hooks, declare component parameters and even <b>inject services</b> 
+        from the dependency injection container
+        built into <b>ASP.NET Core</b>. 
+    </p
+    <img src="img/march_3.png" class="rounded-lg shadow-lg" />
+
+    <br />
+
+    <p>
+        <b>4.</b> 
+        The HTML contains buttons for incrementing and decrementing the counter. 
+        Pay close attention to the <b>HTMX</b> attributes that are attached to the buttons 
+        and how the C# model is utilized inside the HTML.
+    </p>
+    <img src="img/march_4.png" class="rounded-lg shadow-lg" />
+
+    <br />
+
+    <p>
+        When this button is clicked, HTMX executes a HTTP POST request to 
+        <b>counter/update</b> endpoint. The POST request's body is specified 
+        in the <i>hx-vals</i> attribute: a JSON serialized representation of our <b>model</b>, 
+        where the count is <b>+1</b> to whatever was in the model at the time of rendering
+        this component.
+
+        <br />
+        <br />
+
+        Because the <i>hx-target</i> attribute defines the target to be the Counter component's 
+        outermost div (with id of <i>counter</i>), 
+        clicking this button means that the counter basically replaces itself with a new 
+        counter component returned from the server, but with the count incremented by one
+        compared to what was previously on the screen.
+    </p>
+
+    <br />
+
+    <p>
+        <b>5.</b>
+        We now have the UI element, next we need to somehow handle those HTTP requests
+        that are being made via HTMX to the <b>/counter</b> endpoints.
+
+        <br />
+        <br />
+
+        Here's the contents of <i>CounterEndpoint.cs</i>.
+        <img src="img/march_5.png" class="rounded-lg shadow-lg" />
+
+        <br />
+
+        We are defining a <i>Request</i> record type that will act as the HTTP request body payload
+        to our endpoint. We also define two endpoint handler functions, <i>GetCounter</i> 
+        and <i>UpdateCounter</i>.
+
+        <br />
+        <br />
+
+        <i>GetCounter</i> simply returns a Counter component with an initial state and 
+        <i>UpdateCounter</i> returns a Counter component with model state where 
+        the count is whatever the request specifies it to be.
+
+        <br />
+        <br />
+
+        <section class="rounded-lg p-4 shadow-lg bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-300">
+            <h1 class="text-lg font-bold">
+                <i>Note regarding component usage</i>
+            </h1>
+            <br />
+            <p>
+                Even though inside Razor components we can use components with the familiar
+                syntax:
+                <br />
+                <b class="text-cyan-600 dark:text-pink-400">@("<Counter />")</b>
+                <br />
+                or
+                <br />
+                <b class="text-cyan-600 dark:text-pink-400">@("<Counter Model=\"SomeModel\" />")</b>
+                <br />
+                we can also return components from the endpoint handlers as HTTP responses, 
+                which is a great use case for HTMX!
+            </p>
+        </section>
+    </p>
+
+    <br />
+
+    <p>
+        <b>6.</b>
+        Ok, cool. We have a <b>UI component</b> and <b>endpoint handlers</b> that return that component in different states.
+        But where are the routes? How are these glued together? 
+
+        <br />
+        <br />
+        The "glue" is in <b>program.cs</b>. In there, you register what routes you want, 
+        the endpoint handlers for those routes, whether the route requires authorization or not, etc. 
+        
+        <br />
+        <br />
+
+        Here's how the <i>GetCounter</i> and <i>UpdateCounter</i> features are registered in <b>Program.cs</b>
+        <img src="img/march_6.png" class="rounded-lg shadow-lg" />
+    </p>
+
+    <br />
+    <br />
+
+    <h1 class="text-xl font-bold">Bonus: Validators and Feature Flags</h1>
+    <br />
+    <p>
+        If you looked closely at the previous image of <b>Program.cs</b>, you might have seen
+        that there were some additional functions chained into the feature registration, 
+        mainly these:
+    </p>
+
+    <br />
+
+    <code class="text-dark-600 dark:text-yellow-400">
+        .WithFeatureFlags(FeatureFlag.Counter)
+        <br />
+        @(".WithValidation<CounterValidator>()")
+    </code>
+
+    <br />
+    <br />
+
+    Adding feature flags and validators is really straight forward in the MARCH template.
+
+    <br />
+    <br />
+        
+    <h2 class="text-lg font-bold">Feature Flags</h2>
+
+    <p>
+        Feature flags are simply enum values. Their enabled/disabled state can be set in appsettings.json,
+        where there needs to be a property with the same value as the enum value's text representation.
+        By changing these values, features can be enabled or disabled at runtime. 
+        
+        <br />
+
+<pre><code class="text-dark-600 dark:text-yellow-400">
+&quot;Features&quot;: {
+    &quot;Counter&quot;: {
+        &quot;Enabled&quot;: true,
+        //...
+    },
+    // ...
+}
+</code></pre>
     
+        <br />
+
+        When we add 
+        <span class="text-yellow-600 dark:text-yellow-400">WithFeatureFlags(FeatureFlag.Counter)</span> 
+        on the counter feature, the enabled/disabled state of that feature is evaluated
+        at the beginning of each request. If the feature is disabled, 
+        the request pipeline is short circuited and the endpoint handlers are not called.
+    </p>
+
+    <br />
+        
+    <h2 class="text-lg font-bold">Validators</h2>
+
+    <p>
+        Validators are classes that, through the ValidatorBase base class, 
+        implement the <b><i>IValidator</i></b> interface from 
+        <a href="https://docs.fluentvalidation.net/en/latest/">Fluent Validation</a> library. 
+        They contain validation logic that is executed against the 
+        incoming request model.
+        <br />
+        <br />
+
+        For example, here's what the validator for the Counter looks like. 
+        It validates the <i>Request</i> type we defined inside 
+        <i>CounterEndpoint.cs </i>
+        and it only considers count
+        between -5 and 5 to be valid.
+        <br />
+
+        <img src="img/march_7.png" class="rounded-lg shadow-lg" />
+
+        <br>
+        You can test this yourself at the 
+        <a class="underline" href="@(NavigationManager?.BaseUri + "counter")">Counter demo</a> page.
+        <br />
+        <br />
+        After you have defined a validator, and added it to a feature by calling <span class="text-yellow-600 dark:text-yellow-400">@(".WithValidation<CounterValidator>()")"</span> 
+        , the validator is executed at the beginning of each request,
+        <b>before the request arrives at the endpoint handler</b>.
+
+        <br />
+        <br />
+        Unlike Feature Flags, a failed validation does not short circuit the request.   
+        We want to continue processing the request, executing the endpoint handler and 
+        probably even return the Counter component to the client
+        <b>even if</b> there were validation errors. The returned component
+        can display validation error messages, for example.
+
+        <br />
+        <br />
+        <b>But how do you get access to the validation results if the validation was executed
+        <i>before</i> the request even arrived at the endpoint handler?</b>
+
+        <br />
+        <br />
+        The answer is the <b>ValidationContext</b> service. It is a service with a scoped lifetime,
+        and you can simply inject it wherever you need access to the validation 
+        results of the current request.
+        
+        <br />
+        <br />
+        In an endpoint handler:
+        <img src="img/march_8.png" class="rounded-lg shadow-lg" />
+
+        <br />
+        ...or inside a Razor component:
+        <img src="img/march_9.png" class="rounded-lg shadow-lg" />
+    </p>
+
+    <br />
+    <br />
+
+    <p>And that's it. Dive into the source code on GitHub to learn more.</p>
 </article>
+
+@code
+{
+    [Inject] public NavigationManager? NavigationManager { get; set; }
+}

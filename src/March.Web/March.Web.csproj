@@ -17,9 +17,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Client\NavMenu\" />
-    <Folder Include="Features\Server\StaticFiles\img\" />
-  </ItemGroup>
-
 </Project>

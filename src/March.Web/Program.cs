@@ -63,21 +63,14 @@ routes.AddRoutePath(HTTP.GET, "/counter", CounterEndpoint.GetCounter)
       .Produces<RazorComponentResult<Counter>>()
       .WithFeatureFlags(FeatureFlag.Counter)
       .AllowAnonymous()
-      .WithSummary("Get a counter button");
+      .WithSummary("Get a counter component");
 
-routes.AddRoutePath(HTTP.POST, "/counter/increment", CounterEndpoint.IncrementCounter)
+routes.AddRoutePath(HTTP.POST, "/counter/update", CounterEndpoint.UpdateCounter)
       .Produces<RazorComponentResult<Counter>>()
-      .WithFeatureFlags(FeatureFlag.CounterIncrement)
+      .WithFeatureFlags(FeatureFlag.Counter)
       .WithValidation<CounterValidator>()
       .AllowAnonymous()
-      .WithSummary("Increment a counter button");
-
-routes.AddRoutePath(HTTP.POST, "/counter/decrement", CounterEndpoint.DecrementCounter)
-      .Produces<RazorComponentResult<Counter>>()
-      .WithFeatureFlags(FeatureFlag.CounterDecrement)
-      .WithValidation<CounterValidator>()
-      .AllowAnonymous()
-      .WithSummary("Decrement a counter button");
+      .WithSummary("Update a counter component");
 
 routes.AddRoutePath(HTTP.GET, "/form", FormEndpoint.GetForm)
       .Produces<RazorComponentResult<Form>>()

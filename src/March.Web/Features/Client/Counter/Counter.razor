@@ -1,16 +1,14 @@
 ﻿<div id="counter">
-    <div class="flex flex-column mt-6">
+    <div class="flex flex-column">
         <!-- Decrement Button -->
-        <button class="p-3 rounded-md bg-cyan-600 hover:bg-cyan-700 dark:bg-sky-900 dark:hover:bg-sky-800"
-                hx-post="counter/decrement"
+        <button class="p-3"
+                hx-post="counter/update"
                 hx-trigger="click"
                 hx-target="#counter"
                 hx-swap="outerHTML"
                 hx-ext='json-enc'
                 hx-vals='@((Model with { Count = Model.Count - 1 }).ToJson())'>
-            <span class="text-xl">
-                <i class="fas fa-arrow-left"></i>
-            </span>
+            <span class="text-3xl"><i class="fas fa-arrow-left"></i></span>
         </button>
 
         <!-- Counter Value -->
@@ -21,28 +19,23 @@
         </div>
 
         <!-- Increment Button -->
-        <button class="p-3 rounded-md bg-cyan-600 hover:bg-cyan-700 dark:bg-sky-900 dark:hover:bg-sky-800"
-                hx-post="counter/increment"
+        <button class="p-3"
+                hx-post="counter/update"
                 hx-trigger="click"
                 hx-target="#counter"
                 hx-swap="outerHTML"
                 hx-ext='json-enc'
                 hx-vals='@((Model with { Count = Model.Count + 1 }).ToJson())'>
-            <span class="text-xl">
-                <i class="fas fa-arrow-right"></i>
-            </span>
+            <span class="text-3xl"><i class="fas fa-arrow-right"></i></span>
         </button>
     </div>
 
     <!-- Validation Message -->
-    @if (ValidationContext.Errors.Any(e => e.PropertyName == nameof(Model.Count)))
+    @if (ValidationContext.TryGetError(nameof(Model.Count), out var error))
     {
-        <p class="text-red-500 mt-4">
-            @ValidationContext.ValidationResults.Errors.First(e => e.PropertyName == nameof(Model.Count)).ErrorMessage
-        </p>
+        <p class="text-red-500 mt-4">@error.ErrorMessage</p>
     }
 </div>
-
 
 @code
 {
@@ -53,7 +46,6 @@
     public record CounterModel
     {
         public int Count { get; set; }
-        public bool IsIncrement { get; set; }
         public string ToJson() => JsonSerializer.Serialize(this);
     }
 }

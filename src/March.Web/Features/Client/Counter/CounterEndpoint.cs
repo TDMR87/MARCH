@@ -4,29 +4,16 @@ public class CounterEndpoint
 {
     public record Request(int Count);
 
-    public static IResult GetCounter(FeatureFlagService featureFlags)
+    public static IResult GetCounter()
     {
-        return Component<Counter, CounterModel>(model: new()
-        {
-            Count = 0,
-            IsIncrement = true
-        });
+        return Component<Counter>();
     }
 
-    public static IResult IncrementCounter(Request request, FeatureFlagService featureFlags)
-    {
-        return Component<Counter, CounterModel>(model: new()
-        {
-            IsIncrement = true,
-            Count = request.Count,
-        });
-    }
 
-    public static IResult DecrementCounter(Request request, FeatureFlagService featureFlags)
+    public static IResult UpdateCounter(Request request)
     {
         return Component<Counter, CounterModel>(model: new()
         {
-            IsIncrement = false,
             Count = request.Count,
         });
     }

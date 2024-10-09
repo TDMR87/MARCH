@@ -1,20 +1,17 @@
-﻿<div id="globalExceptionModal" class="modal is-active">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-        <header class="modal-card-head">
-            <p class="modal-card-title">An exception occurred</p>
-            <button onclick="closeErrorModal()" class="delete" aria-label="close"></button>
-        </header>
-        <section class="modal-card-body">
-            <p>@Model.Message</p>
-        </section>
-        <footer class="modal-card-footer">
-            <button onclick="closeErrorModal()" class="button">Close</button>
-        </footer>
+﻿<div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+    <div class="bg-gray-300 text-gray-900 rounded-lg shadow-lg w-full max-w-4xl">
+        <div class="p-6">
+            <p><p>@Model.Message</p></p>
+        </div>
+        <div class="p-4 bg-gray-100 rounded-b-lg flex justify-end">
+            @* TODO: close button *@
+        </div>
     </div>
 </div>
 
-@code {
+@code 
+{
+    [Inject] NavigationManager? NavigationManager { get; set; }
     [Parameter] public GlobalExceptionModel Model { get; set; } = new();
 
     public record GlobalExceptionModel
