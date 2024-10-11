@@ -1,5 +1,3 @@
-using March.Web.Features.Server.Exceptions;
-
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
     Args = args,
@@ -44,15 +42,10 @@ routes.AddRoutePath(HTTP.GET, "/home", HomeEndpoint.GetHome)
       .AllowAnonymous()
       .WithSummary("Get the home page content");
 
-routes.AddRoutePath(HTTP.GET, "/nav-items", NavEndpoint.GetNav)
+routes.AddRoutePath(HTTP.GET, "/nav-items", NavEndpoint.GetNavItems)
       .Produces<RazorComponentResult<NavItems>>()
       .AllowAnonymous()
       .WithSummary("Get the navigation menu");
-
-routes.AddRoutePath(HTTP.POST, "/nav-items", NavEndpoint.ToggleNav)
-      .Produces<RazorComponentResult<NavItems>>()
-      .AllowAnonymous()
-      .WithSummary("Open and close a navigation menu");
 
 routes.AddRoutePath(HTTP.GET, "/how-it-works", HowItWorksEndpoint.GetHowItWorks)
       .Produces<RazorComponentResult<HowItWorks>>()

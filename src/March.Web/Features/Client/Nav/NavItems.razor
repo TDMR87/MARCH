@@ -1,11 +1,11 @@
-﻿<div id="navItems" 
-     class="w-full md:w-4/4 p-4" 
+﻿<div id="nav-items" 
+     class="w-full md:w-4/4 p-4 fixed"
      hx-get="/nav-items" 
      hx-trigger="login from:body, logout from:body" 
      hx-target="this" 
      hx-swap="outerHTML">
 
-    <aside id="side-menu" class="menu" hidden="@(Model.IsCollapsed)">
+    <aside class="menu p-4 z-20 shadow-xl md:shadow-none absolute rounded-lg bg-stone-200/5 backdrop-blur-md rounded-lg md:bg-transparent md:backdrop-blur-none">
         <p class="font-bold text-sm mb-2">GENERAL</p>
         <ul class="space-y-2">
             <li>
@@ -14,7 +14,7 @@
                    hx-trigger="click" 
                    hx-target="#mainContentArea" 
                    hx-swap="innerHTML"
-                   hx-on::before-request="toggleNavButton()"
+                   hx-on::before-request="hideNavItems()"
                    class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
                    Home
                 </a>
@@ -25,7 +25,7 @@
                    hx-trigger="click" 
                    hx-target="#mainContentArea" 
                    hx-swap="innerHTML"
-                   hx-on::before-request="toggleNavButton()"
+                   hx-on::before-request="hideNavItems()"
                    class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
                    How it works
                 </a>
@@ -41,7 +41,7 @@
                    hx-target="#mainContentArea" 
                    hx-swap="innerHTML" 
                    hx-ext='json-enc'
-                   hx-on::before-request="toggleNavButton()"
+                   hx-on::before-request="hideNavItems()"
                    class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
                    Counter
                 </a>
@@ -53,7 +53,7 @@
                    hx-target="#mainContentArea"
                    hx-swap="innerHTML"
                    hx-ext='json-enc'
-                   hx-on::before-request="toggleNavButton()"
+                   hx-on::before-request="hideNavItems()"
                    class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
                    Form
                 </a>
@@ -71,7 +71,7 @@
                        hx-target="#mainContentArea"
                        hx-swap="innerHTML"
                        hx-ext='json-enc'
-                       hx-on::before-request="toggleNavButton()"
+                       hx-on::before-request="hideNavItems()"
                        class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
                        <b>Log in</b>
                     </a>
@@ -86,7 +86,7 @@
                        hx-target="#mainContentArea"
                        hx-swap="innerHTML"
                        hx-ext='json-enc'
-                       hx-on::before-request="toggleNavButton()"
+                       hx-on::before-request="hideNavItems()"
                        class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
                        Log out
                     </a>
@@ -98,7 +98,7 @@
                        hx-target="#mainContentArea"
                        hx-swap="innerHTML"
                        hx-ext='json-enc'
-                       hx-on::before-request="toggleNavButton()"
+                       hx-on::before-request="hideNavItems()"
                        class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
                        Admin dashboard
                     </a>
@@ -108,16 +108,11 @@
     </aside>
 </div>
 
-
 <script>
-    function isSmallScreen() {
-        return window.matchMedia("(max-width: 768px)").matches;
-    }
-
-    function toggleNavButton() {
-        const navButton = document.getElementById('navMenuButton');
-        if (isSmallScreen() && navButton) {
-            navButton.click();
+    function hideNavItems() {
+        const navItems = document.getElementById('nav-items');
+        if (navItems && isSmallScreen()) {
+            navItems.hidden = true;
         }
     }
 </script>
@@ -125,12 +120,4 @@
 @code
 {
     [Inject] public IHttpContextAccessor? HttpContextAccessor { get; set; }
-
-    [Parameter] public NavModel Model { get; set; } = new() { IsCollapsed = false };
-
-    public class NavModel
-    {
-        public bool IsCollapsed { get; set; }
-        public string ToJson() => JsonSerializer.Serialize(this);
-    }
 }

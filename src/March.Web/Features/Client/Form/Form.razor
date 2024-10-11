@@ -10,13 +10,12 @@
         <label class="block font-bold mb-2">
             Name
         </label>
-        <div class="relative">
-            <input name="@(nameof(Model.Name))"
-                   value="@Model.Name"
-                   class="w-full p-3 border border-gray-300 rounded-md focus:outline-none"
-                   type="text"
-                   placeholder="e.g. John Doe">
-        </div>
+
+        <input name="@(nameof(Model.Name))"
+                value="@Model.Name"
+                class="w-full text-gray-900 p-3 border border-gray-300 rounded-md focus:outline-none"
+                type="text"
+                placeholder="e.g. John Doe">
         @if (ValidationContext.TryGetError(nameof(Model.Name), out var error))
         {
             <p class="text-red-600 text-sm mt-2">@error.ErrorMessage</p>
@@ -37,6 +36,12 @@
             Submit
         </button>
     </div>
+
+    <p>
+        For the 'Name' field, an error message will be displayed if it is not filled on form submission.
+        For the 'Email' field, an error message is displayed as soon as the focus leaves the element and
+        the value is not in a valid email format.
+    </p>
 </form>
 
 

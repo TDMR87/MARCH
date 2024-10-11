@@ -1,5 +1,6 @@
 ﻿<div id="counter">
-    <div class="flex flex-column">
+    <div class="flex flex-column justify-center">
+
         <!-- Decrement Button -->
         <button class="p-3"
                 hx-post="counter/update"
@@ -33,8 +34,15 @@
     <!-- Validation Message -->
     @if (ValidationContext.TryGetError(nameof(Model.Count), out var error))
     {
-        <p class="text-red-500 mt-4">@error.ErrorMessage</p>
+        <p class="text-red-500 mt-4 text-center">@error.ErrorMessage</p>
     }
+
+    <br />
+
+    <p>
+        Try incrementing or decrementing the counter value using the buttons above.
+        When values get too high or too low, an error message will be displayed.
+    </p>
 </div>
 
 @code

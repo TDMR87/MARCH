@@ -1,6 +1,6 @@
 ﻿<article class="prose lg:prose-xl">
 
-    <h1 class="text-xl font-bold">How it works</h1>
+    <h1 class="text-2xl font-bold">How it works</h1>
 
     <br />
 
@@ -99,7 +99,7 @@
         component life-cycle hooks, declare component parameters and even <b>inject services</b> 
         from the dependency injection container
         built into <b>ASP.NET Core</b>. 
-    </p
+    </p>
     <img src="img/march_3.png" class="rounded-lg shadow-lg" />
 
     <br />
@@ -146,7 +146,7 @@
 
         <br />
 
-        We are defining a <i>Request</i> record type that will act as the HTTP request body payload
+        We are defining a <i>Request</i> record type that will act as the HTTP request body model
         to our endpoint. We also define two endpoint handler functions, <i>GetCounter</i> 
         and <i>UpdateCounter</i>.
 
@@ -155,7 +155,8 @@
 
         <i>GetCounter</i> simply returns a Counter component with an initial state and 
         <i>UpdateCounter</i> returns a Counter component with model state where 
-        the count is whatever the request specifies it to be.
+        the count is whatever the request specifies it to be (in this case, the count 
+        could be +1 compared to the currently rendered count because of the HTMX request payload).
 
         <br />
         <br />
@@ -222,16 +223,11 @@
     <br />
     <br />
 
-    Adding feature flags and validators is really straight forward in the MARCH template.
-
-    <br />
-    <br />
-        
     <h2 class="text-lg font-bold">Feature Flags</h2>
 
     <p>
         Feature flags are simply enum values. Their enabled/disabled state can be set in appsettings.json,
-        where there needs to be a property with the same value as the enum value's text representation.
+        where there needs to be a property with the same name as the enum value.
         By changing these values, features can be enabled or disabled at runtime. 
         
         <br />
@@ -282,7 +278,8 @@
         <a class="underline" href="@(NavigationManager?.BaseUri + "counter")">Counter demo</a> page.
         <br />
         <br />
-        After you have defined a validator, and added it to a feature by calling <span class="text-yellow-600 dark:text-yellow-400">@(".WithValidation<CounterValidator>()")"</span> 
+        After you have defined a validator, and added it to a feature by calling 
+        <span class="text-yellow-600 dark:text-yellow-400">@("WithValidation<CounterValidator>()")"</span> 
         , the validator is executed at the beginning of each request,
         <b>before the request arrives at the endpoint handler</b>.
 
@@ -318,7 +315,13 @@
     <br />
     <br />
 
-    <p>And that's it. Dive into the source code on GitHub to learn more.</p>
+    <p>
+        And that's it. Dive into the source code on 
+        <a href="https://github.com/TDMR87/MARCH" class="underline">
+            GitHub <span><i class="fab fa-github"></i></span>
+        </a> 
+        to learn more.
+    </p>
 </article>
 
 @code

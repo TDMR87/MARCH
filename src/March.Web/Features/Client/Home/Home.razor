@@ -1,54 +1,55 @@
 ﻿<article class="prose lg:prose-xl">
 
-    <h1 class="text-xl font-bold">A no-nonsense approach to creating Server-Side-Rendered web applications.</h1>
+    <h1 class="text-2xl font-bold">A no-nonsense approach to creating Server-Side-Rendered web applications.</h1>
     
     <br />
 
     <p>
-        <b>MARCH</b> is a <i>template web application technology stack</i> for creating modern, interactive
-        Server-Side Rendered web applications. The stack is based on the concept of HATEOAS 
+        <b>MARCH</b> is a <i>project template</i> for creating interactive
+        Server-Side Rendered web applications. The project architecture is based on the concept of HATEOAS 
         <i>(hypermedia as the engine of application state)</i>
-        and MARCH implements this concept with as little technical overhead as possible by bringing the frontend 
-        and backend close to eachother without relying too much on different UI frameworks.
+        and MARCH implements this with .NET Minimal APIs, Razor Components and HTMX.
     </p>
 
     <br />
 
     <p>
-        <b>Minimal APIs</b> offer a high-performance framework for creating HTTP services.
+        <b class="text-orange-500 dark:text-orange-200">Minimal API's</b> offer a slim and compact framework for creating HTTP services.
         With Minimal APIs, you can quickly spin up endpoints, handle requests, and return responses
         without the need for complex boilerplate code. With <b>ASP.NET Core Web Api</b> as the backend framework,
         you can take full advantage of the robust <b>.NET ecosystem</b>,
         with essential backend services like dependency injection, middleware,
-        authentication/authorization, data access etc. All built-in to .NET to streamline backend development.
+        authentication/authorization, ORMs etc.
     </p>
 
     <br />
 
     <p>
-        <b>Razor Components</b> bring the power of component-based development to .NET,
-        enabling developers to build reusable, encapsulated UI components with ease.
-        By mixing <b>C#</b> and <b>HTML</b> together, Razor Components act as the dynamic HTML template
-        that integrates perfectly with your backend code.
+        <b class="text-teal-500">Razor Components</b> act as the HTML templating engine. They bring the power of 
+        component-based development to .NET and enables building reusable, encapsulated UI 
+        components.
+        By mixing <b>C#</b> and <b>HTML</b> together, Razor Components integrate perfectly 
+        with the .NET backend code..
     </p>
 
     <br />
 
     <p>
-        <b>HTMX</b> brings all of this together by allowing you to build dynamic, 
-        interactive web applications without the need for heavy client-side frameworks. 
-        It extends standard HTML attributes with custom ones, enabling actions like 
-        HTTP requests, form submissions, and partial page updates—all without 
-        writing JavaScript. By augmenting your <b>Razor Components</b> with HTMX attributes and 
+        <b class="text-violet-300">HTMX</b> brings interactivity to the server-side rendered content 
+        without the need for heavy client-side frameworks. 
+        HTMX extends standard HTML with custom attributes, enabling actions like 
+        HTTP requests, form submissions, and partial page updates. 
+        By augmenting your <b>Razor Components</b> with HTMX attributes and 
         communicating with <b>ASP.NET Core Minimal APIs</b>, HTMX keeps the front end interactive 
         without full page reloads, making it an ideal 
-        choice for lightweight, maintainable, and responsive web applications.
+        choice for lightweight and responsive web applications.
     </p>
 
     <br />
 
     <p>
         For <b>CSS styling</b>, you can simply bring in your own favorite CSS framework, 
-        whether it's Tailwind CSS, Bootstrap or your custom CSS library, to style the Razor components.
+        whether it's <span class="text-gray-500 dark:text-pink-300">Tailwind CSS</span>, 
+        <span class="text-orange-500 dark:text-orange-300">Bootstrap</span> or your custom CSS library.
     </p>
 </article>

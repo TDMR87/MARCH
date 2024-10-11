@@ -29,6 +29,7 @@ global using March.Web.Features.Client.Admin;
 global using March.Web.Features.Client.Authentication;
 global using March.Web.Features.Server.Rendering;
 global using March.Web.Features.Server.FeatureFlags;
+global using March.Web.Features.Server.Exceptions;
 global using Microsoft.AspNetCore.Components;
 global using Microsoft.AspNetCore.Http.HttpResults;
 global using Microsoft.AspNetCore.ResponseCompression;

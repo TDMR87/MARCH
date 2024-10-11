@@ -1,5 +1,5 @@
-﻿function closeErrorModal() {
-    document.getElementById('globalExceptionModal').classList.remove('is-active');
+﻿function isSmallScreen() {
+    return window.matchMedia("(max-width: 768px)").matches;
 }
 
 function getRouteContentsFromServer(evt) {

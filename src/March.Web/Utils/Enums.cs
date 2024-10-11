@@ -3,8 +3,6 @@
 public enum FeatureFlag
 {
     Counter,
-    CounterIncrement,
-    CounterDecrement,
     Form,
     FormSubmit
 }

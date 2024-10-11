@@ -2,9 +2,14 @@
 
 public class AdminEndpoint
 {
-    public record Request();
+    public record ToggleFeatureFlagRequest(bool Enabled);
 
-    public static IResult GetDashboard(HttpRequest req)
+    public static IResult GetDashboard()
+    {
+        return Component<AdminDashboard>();
+    }
+
+    public static IResult ToggleFeatureFlag(ToggleFeatureFlagRequest request)
     {
         return Component<AdminDashboard>();
     }

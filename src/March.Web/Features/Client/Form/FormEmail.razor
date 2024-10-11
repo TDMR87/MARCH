@@ -1,14 +1,12 @@
 ﻿<div class="mb-4" hx-target="this" hx-swap="outerHTML">
     <label class="block font-bold mb-2" for="email">Email</label>
-    <div class="relative">
-        <input name="@nameof(Model.Email)"
-               class="w-full p-3 border border-gray-300 rounded-md focus:outline-none"
-               type="email"
-               value="@Model.Email"
-               placeholder="e.g. john.doe@email.com"
-               hx-post="form/email"
-               hx-ext='json-enc'>
-    </div>
+    <input name="@nameof(Model.Email)"
+            class="w-full text-gray-900 p-3 border border-gray-300 rounded-md focus:outline-none"
+            type="email"
+            value="@Model.Email"
+            placeholder="e.g. john.doe@email.com"
+            hx-post="form/email"
+            hx-ext='json-enc'>
     @if (ValidationContext.TryGetError(nameof(Model.Email), out var error))
     {
         <p class="text-red-600 text-sm mt-2">@error.ErrorMessage</p>
