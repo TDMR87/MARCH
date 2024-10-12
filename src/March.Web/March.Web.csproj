@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>bf227e66-6990-4cd3-976c-d63dfd30ebb2</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,17 +13,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Features\Server\StaticFiles\index.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Update="Features/Server/StaticFiles/**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
   </ItemGroup>
 
-    <ItemGroup>
-	    <UpToDateCheckBuilt Include="Features/Server/StaticFiles/App.css" Set="Css" />
-    </ItemGroup>
+  <ItemGroup>
+	  <UpToDateCheckBuilt Include="Features/Server/StaticFiles/App.css" Set="Css" />
+  </ItemGroup>
 
-    <Target Name="Tailwind" BeforeTargets="Build">
-	    <Exec Command="npm run css:build" />
-    </Target>
+  <Target Name="Tailwind" BeforeTargets="Build">
+	  <Exec Command="npm run css:build" />
+  </Target>
 
 </Project>

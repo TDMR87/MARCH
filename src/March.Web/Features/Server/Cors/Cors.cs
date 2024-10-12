@@ -7,7 +7,7 @@ public static class Cors
         builder.Services
             .AddCors(policy => policy
             .AddDefaultPolicy(builder => builder
-            .WithOrigins("https://localhost:5001")
+            .WithOrigins("https://localhost:5001", "https://march-project.azurewebsites.net/")
             .AllowAnyHeader()
             .AllowAnyMethod()));
     }
