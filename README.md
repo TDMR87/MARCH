@@ -25,6 +25,8 @@ making it an ideal choice for lightweight and responsive web applications.
 
 For CSS styling, you can simply bring in your own favorite CSS framework, whether it's Tailwind CSS, Bootstrap or your custom CSS library.
 
+Check out the live demo site at [https://march-project.azurewebsites.net](https://march-project.azurewebsites.net)
+
 >Wait a minute, isn't this Blazor ? 🤔 \
 Nope. Even though technologies like .NET, C# and Razor Components are utilized in this project,
 Blazor does not play a role here at all. In fact, even though Blazor could be integrated into
