@@ -112,5 +112,10 @@ routes.AddRoutePath(HTTP.GET, "/admin/dashboard", AdminEndpoint.GetDashboard)
       .RequireAuthorization()
       .WithSummary("Get the admin dashboard");
 
+routes.AddRoutePath(HTTP.POST, "/admin/feature-toggle", AdminEndpoint.ToggleFeatureFlag)
+      .Produces<RazorComponentResult<AdminDashboard>>()
+      .RequireAuthorization()
+      .WithSummary("Toggles a feature on or off");
+
 app.MapGet("app", () => Component<App>());
 app.Run();

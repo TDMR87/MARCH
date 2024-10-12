@@ -1,11 +1,17 @@
 ﻿<div class="flex flex-col min-h-screen">
+    <!-- Navigation Bar -->
     <NavBar />
+
+    <!-- Main Content Area -->
     <section class="flex-grow py-24">
         <div class="max-w-screen-lg mx-auto">
             <div class="flex flex-col md:flex-row">
+                <!-- Side Navigation Items -->
                 <nav class="w-full md:w-1/5">
                     <NavItems />
                 </nav>
+
+                <!-- Main Content Area -->
                 <div class="w-full md:w-4/5">
                     <div class="p-8">
                         <Hero />
@@ -17,7 +23,10 @@
             </div>
         </div>
     </section>
-    <footer class="py-4">
+
+    <!-- Footer -->
+    <footer class="w-full py-4">
+        <!-- Added w-full to ensure it takes the full width -->
         <div class="flex text-center justify-center">
             <p>
                 Diego Rönkkömäki-Tapia &copy; All rights reserved.

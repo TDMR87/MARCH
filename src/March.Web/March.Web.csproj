@@ -17,4 +17,12 @@
     </None>
   </ItemGroup>
 
+    <ItemGroup>
+	    <UpToDateCheckBuilt Include="Features/Server/StaticFiles/App.css" Set="Css" />
+    </ItemGroup>
+
+    <Target Name="Tailwind" BeforeTargets="Build">
+	    <Exec Command="npm run css:build" />
+    </Target>
+
 </Project>
