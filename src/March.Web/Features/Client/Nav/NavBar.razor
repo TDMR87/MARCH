@@ -4,31 +4,40 @@
             <div class="flex items-center">
                 <button 
                     onclick="toggleCollapsed()"
-                    class="hover:text-gray-600 dark:hover:text-gray-200 mr-6">
+                    class="hover:text-gray-500 dark:hover:text-gray-200 mr-6">
                     <i class="fas fa-bars"></i>
                 </button>
                 <a href="/" class="text-xl font-bold">MARCH</a>
                 <div class="lg:flex space-x-4 ml-10">
-                    <a href="https://github.com/TDMR87/MARCH" class="hover:bg-gray-300 dark:hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                    <a href="https://github.com/TDMR87/MARCH" class="hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
                         GitHub <span><i class="fab fa-github"></i></span>
                     </a>
                 </div>
             </div>
-            <button onclick="toggleDarkMode()" class="hover:bg-gray-300 dark:hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
-                <span><i class="fa-regular fa-moon"></i></span>
+            <button onclick="toggleDarkMode()" class="hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                <span><i id="darkModeIcon" class=""></i></span>
             </button>
         </div>
     </div>
 </nav>
 
 <script>
+
+    document.getElementById('darkModeIcon').className = (mode === "dark") 
+        ? 'fa-regular fa-moon' 
+        : 'fa-regular fa-lightbulb';
+
     function toggleCollapsed() {
         const navItems = document.getElementById('nav-items');
         navItems.hidden = !navItems.hidden;
     }
 
     function toggleDarkMode() {
-        document.body.classList.toggle('dark');
+        const isDarkMode = document.documentElement.classList.toggle('dark');
+        localStorage.setItem("mode", isDarkMode ? "dark" : "light");
+        document.getElementById('darkModeIcon').className = isDarkMode 
+            ? 'fa-regular fa-moon' 
+            : 'fa-regular fa-lightbulb';
     }
 
     const navItems = document.getElementById('nav-items');

@@ -16,9 +16,12 @@
                     <div class="p-8">
                         <Hero />
                     </div>
-                    <div class="p-12" id="mainContentArea">
-                        <Home />
+                    <div class="p-12" id="mainContentArea" hx-indicator="#contentLoadingIndicator">
+                        <!-- Swap content here with HTMX -->
                     </div>
+                    <p class="htmx-indicator justify-center text-center" id="contentLoadingIndicator">
+                        Loading...
+                    </p>
                 </div>
             </div>
         </div>

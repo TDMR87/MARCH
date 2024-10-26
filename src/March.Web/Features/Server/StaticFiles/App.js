@@ -3,9 +3,10 @@
 }
 
 function getRouteContentsFromServer(evt) {
+    const route = window.location.pathname !== "/" ? window.location.pathname : "/home";
     const targetElement = document.getElementById('mainContentArea');
-    if (targetElement && window.location.pathname !== '/') {
-        htmx.ajax('GET', window.location.pathname, {
+    if (targetElement) {
+        htmx.ajax('GET', route, {
             target: targetElement,
             swap: 'innerHTML',
             error: (err) => console.error('Failed to load content:', err)
