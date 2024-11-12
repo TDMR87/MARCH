@@ -40,9 +40,9 @@
 </div>
 
 @code {
-    @inject NavigationManager NavigationManager;
+    [Inject] public NavigationManager? NavigationManager { get; set; }
 
-    @inject IHttpContextAccessor HttpContextAccessor;
+    [Inject] public IHttpContextAccessor? HttpContextAccessor { get; set; }
 
     private string CurrentRoute = "/home";
 
@@ -50,7 +50,7 @@
     {
         var request = HttpContextAccessor?.HttpContext?.Request;
         var requestCurrentUrl = request?.Headers["hx-current-url"].ToString() ?? string.Empty;
-        if (!string.IsNullOrEmpty(requestCurrentUrl))
+        if (!string.IsNullOrEmpty(requestCurrentUrl) && NavigationManager != null)
         {
             var requestedRoute = requestCurrentUrl.Replace(NavigationManager.BaseUri, string.Empty);
             CurrentRoute = string.IsNullOrEmpty(requestedRoute) ? CurrentRoute : requestedRoute;
