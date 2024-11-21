@@ -44,16 +44,29 @@
 
     [Inject] public IHttpContextAccessor? HttpContextAccessor { get; set; }
 
-    private string CurrentRoute = "/home";
+    [Inject] public EndpointDataSource? EndpointDataSource { get; set; }
+
+    private string CurrentRoute = string.Empty;
+
+    private static List<string> ValidRoutes = [];
 
     protected override void OnInitialized()
     {
+        ValidRoutes = EndpointDataSource?.Endpoints
+            .OfType<RouteEndpoint>()
+            .Where(endpoint => !string.IsNullOrWhiteSpace(endpoint.RoutePattern.RawText))
+            .Select(endpoint => endpoint.RoutePattern.RawText!)
+            .ToList() ?? [];
+
         var request = HttpContextAccessor?.HttpContext?.Request;
         var requestCurrentUrl = request?.Headers["hx-current-url"].ToString() ?? string.Empty;
-        if (!string.IsNullOrEmpty(requestCurrentUrl) && NavigationManager != null)
+        var requestedRoute = "/" + requestCurrentUrl.Replace(NavigationManager!.BaseUri, string.Empty);
+
+        CurrentRoute = requestedRoute switch
         {
-            var requestedRoute = requestCurrentUrl.Replace(NavigationManager.BaseUri, string.Empty);
-            CurrentRoute = string.IsNullOrEmpty(requestedRoute) ? CurrentRoute : requestedRoute;
-        }
+            "" or "/" => "/home",
+            _ when !ValidRoutes.Contains(requestedRoute) => "/notfound",
+            _ => requestedRoute
+        };
     }
 }

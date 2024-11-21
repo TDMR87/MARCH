@@ -37,6 +37,9 @@ var routes = app.MapGroup("")
    .AddEndpointFilter<RequestLoggingFilter>();
 
 // Add routes
+routes.AddRoutePath(HTTP.GET, "/notfound", RoutingEndpoint.NotFound)
+      .AllowAnonymous();
+
 routes.AddRoutePath(HTTP.GET, "/home", HomeEndpoint.GetHome)
       .Produces<RazorComponentResult<Home>>()
       .AllowAnonymous()

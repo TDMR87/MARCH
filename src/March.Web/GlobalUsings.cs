@@ -19,6 +19,7 @@ global using March.Web.Features.Client.NavMenu;
 global using March.Web.Features.Client.HowItWorks;
 global using March.Web.Features.Client.Form;
 global using March.Web.Features.Client.Nav;
+global using March.Web.Features.Client.Routing;
 global using March.Web.Features.Server.EndpointFilters;
 global using March.Web.Features.Server.Auth;
 global using March.Web.Features.Server.Cors;
