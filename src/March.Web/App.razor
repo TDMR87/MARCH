@@ -16,13 +16,9 @@
                     <div class="p-8">
                         <Hero />
                     </div>
-                    <div class="p-12" id="mainContentArea" hx-get="@CurrentRoute" hx-trigger="load"
-                        hx-indicator="#contentLoadingIndicator">
+                    <div class="p-12" id="mainContentArea" hx-get="@CurrentRoute" hx-trigger="load">
                         <!-- Swap content here with HTMX -->
                     </div>
-                    <p class="justify-center text-center htmx-indicator" id="contentLoadingIndicator">
-                        Loading...
-                    </p>
                 </div>
             </div>
         </div>
