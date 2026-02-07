@@ -14,7 +14,7 @@ This file contains implementation details and conventions for AI coding agents w
 ## Building the Project
 
 ### Prerequisites
-- **.NET 9.0 SDK** - Required for building and running the ASP.NET Core application
+- **.NET 10.0 SDK** - Required for building and running the ASP.NET Core application
 - **Node.js & npm** - Required for Tailwind CSS compilation
 
 ### Build Commands
