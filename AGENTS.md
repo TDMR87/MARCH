@@ -124,32 +124,54 @@ The compiled CSS is referenced in the main HTML template:
 ## Project Architecture
 
 ### Vertical Slice Architecture
-The project is organized by **features**, not layers. Each feature contains all its related code in one folder:
-- Razor components (UI)
-- Endpoint handlers (HTTP logic)
-- Validators (validation rules)
-- Models/DTOs (data structures)
+The project uses a **true vertical slice architecture** where each feature operation is completely self-contained. This means:
+
+**Benefits**:
+- **High cohesion**: All code for a single operation lives together
+- **Low coupling**: Features don't share code unless explicitly needed
+- **Easy navigation**: Finding code is intuitive - follow the folder structure
+- **Self-documenting**: Structure reflects the HTTP API surface
+- **Parallel development**: Teams can work on different features without conflicts
+- **Easy to delete**: Removing a feature is just deleting its folder
+
+### Structure Philosophy
+Each feature operation is a self-contained folder with all its related code:
+- Endpoint (HTTP handler with self-registration)
+- Request DTO (if needed)
+- Validator (if needed)
+- Razor component (UI, in Components/ subfolder)
 
 ### Folder Structure
 ```
 src/March.Web/
 ├── Features/
-│   ├── Client/           # User-facing features
-│   │   ├── Counter/      # Example: Counter feature
-│   │   │   ├── Counter.razor
-│   │   │   ├── CounterEndpoint.cs
-│   │   │   └── CounterValidator.cs
+│   ├── Client/              # User-facing features
+│   │   ├── Counter/         # Example: Counter feature
+│   │   │   ├── Components/  # Shared components
+│   │   │   │   └── Counter.razor
+│   │   │   ├── GetCounter/  # GET operation
+│   │   │   │   └── Endpoint.cs
+│   │   │   └── UpdateCounter/  # POST operation
+│   │   │       ├── Endpoint.cs
+│   │   │       ├── Request.cs
+│   │   │       └── Validator.cs
 │   │   ├── Home/
 │   │   ├── Auth/
 │   │   └── ...
-│   └── Server/           # Server features & static files
-│       ├── StaticFiles/  # Web root (served as /)
+│   └── Server/              # Server features & static files
+│       ├── StaticFiles/     # Web root (served as /)
 │       └── ...
-├── Utils/                # Shared utilities
-├── Program.cs            # Entry point & route registration
-├── App.razor             # Main layout component
-└── _Imports.razor        # Global Razor imports
+├── Utils/                   # Shared utilities
+├── Program.cs               # Entry point & endpoint instantiation
+├── App.razor                # Main layout component
+└── _Imports.razor           # Global Razor imports
 ```
+
+**Key Structure Principles**:
+- Each HTTP operation (GET /counter, POST /counter/update) gets its own folder
+- Shared components for a feature live in `{Feature}/Components/`
+- Request DTOs and Validators are co-located with their endpoint
+- Endpoints self-register via constructor injection
 
 ### Client vs Server Features
 - **Client/**: Features that render UI and handle user interactions
@@ -159,60 +181,124 @@ src/March.Web/
 
 ## Creating New Features
 
-### 1. Create Feature Folder
-Location: `src/March.Web/Features/Client/{FeatureName}/`
+### Step-by-Step Guide: Creating a "Todo" Feature
 
-Example: Creating a "Todo" feature
+#### 1. Create Feature Folder Structure
+Location: `src/March.Web/Features/Client/Todo/`
+
 ```
 Features/Client/Todo/
-├── Todo.razor
-├── TodoEndpoint.cs
-└── TodoValidator.cs  (optional)
+├── Components/
+│   └── Todo.razor          # Shared UI component
+├── GetTodo/                # GET operation
+│   └── Endpoint.cs
+└── UpdateTodo/             # POST operation
+    ├── Endpoint.cs
+    ├── Request.cs
+    └── Validator.cs        # Optional
 ```
 
-### 2. Create Razor Component
-**File**: `Todo.razor`
+**Key Structure Rules**:
+- Each HTTP operation gets its own folder (GetTodo, UpdateTodo, CreateTodo, etc.)
+- Shared components live in `Components/` subfolder
+- Request DTOs are in `Request.cs` (optional if no input needed)
+- Validators are co-located with their endpoint
+
+---
+
+#### 2. Create Razor Component
+**File**: `Components/Todo.razor`
+
 ```razor
 <div id="todo">
     <!-- Your HTML with Tailwind classes -->
-    <h1 class="text-2xl font-bold">@Model.Title</h1>
+    <h1 class="text-2xl font-bold">@Title</h1>
+    
+    @if (ValidationContext.TryGetError(nameof(Title), out var error))
+    {
+        <p class="text-red-500">@error.ErrorMessage</p>
+    }
 </div>
 
 @code {
-    [Parameter] public TodoModel Model { get; set; } = new();
-    [Inject] public ValidationContext ValidationContext { get; set; } = new();
+    [Inject] 
+    public ValidationContext ValidationContext { get; set; } = new();
     
-    public record TodoModel
-    {
-        public string Title { get; set; } = "";
-        public string ToJson() => JsonSerializer.Serialize(this);
-    }
+    [Parameter] 
+    public string Title { get; set; } = "";
 }
 ```
 
 **Key conventions**:
 - Root element must have an `id` attribute (used for HTMX targeting)
-- Use `[Parameter]` for component parameters
-- Inject `ValidationContext` if validation is needed
-- Include `ToJson()` method on models for HTMX `hx-vals` serialization
+- Use `[Parameter]` for component inputs
+- Inject `ValidationContext` if validation errors need to be displayed
+- Keep component logic minimal - handlers go in endpoints
 
-### 3. Create Endpoint Handler
-**File**: `TodoEndpoint.cs`
+---
+
+#### 3. Create GET Endpoint
+**File**: `GetTodo/Endpoint.cs`
+
 ```csharp
-namespace March.Web.Features.Client.Todo;
+namespace March.Web.Features.Client.Todo.GetTodo;
 
-public class TodoEndpoint
+public class Endpoint
 {
-    public record Request(string Title);
+    public const string Path = "/todo";
+    private const string summary = "Get todo component";
 
-    public static IResult GetTodo()
+    public Endpoint(RouteGroupBuilder route)
     {
-        return Component<Todo>();
+        route
+            .MapGet(Path, Handler)
+            .Produces<RazorComponentResult<Components.Todo>>()
+            .AllowAnonymous()  // or .RequireAuthorization()
+            .WithSummary(summary);
     }
 
-    public static IResult UpdateTodo(Request request)
+    public static IResult Handler()
     {
-        return Component<Todo, TodoModel>(model: new()
+        return new RazorComponentResult<Components.Todo>();
+    }
+}
+```
+
+**Key conventions**:
+- Class named `Endpoint` in operation-specific namespace
+- Constructor takes `RouteGroupBuilder` and registers the route
+- `const string Path` defines the route
+- Static `Handler` method contains the logic
+- Self-registration via constructor
+
+---
+
+#### 4. Create POST Endpoint with Validation
+**File**: `UpdateTodo/Endpoint.cs`
+
+```csharp
+namespace March.Web.Features.Client.Todo.UpdateTodo;
+
+public class Endpoint
+{
+    public const string Path = "/todo/update";
+    private const string summary = "Update todo item";
+
+    public Endpoint(RouteGroupBuilder route)
+    {
+        route
+            .MapPost(Path, Handler)
+            .Produces<RazorComponentResult<Components.Todo>>()
+            .WithFeatureFlags(FeatureFlag.Todo)        // Optional
+            .WithValidation<Validator>()                // Optional
+            .AllowAnonymous()
+            .WithSummary(summary);
+    }
+
+    public static IResult Handler(Request request, ValidationContext validationContext)
+    {
+        // Return component with updated data
+        return new RazorComponentResult<Components.Todo>(new
         {
             Title = request.Title
         });
@@ -220,56 +306,62 @@ public class TodoEndpoint
 }
 ```
 
-**Key conventions**:
-- Static class with static methods
-- Define request DTOs as nested records
-- Use `Component<TRazorComponent>()` helper to return Razor components
-- Second generic parameter passes model data to component
+**File**: `UpdateTodo/Request.cs`
 
-### 4. Create Validator (Optional)
-**File**: `TodoValidator.cs`
 ```csharp
-namespace March.Web.Features.Client.Todo;
+namespace March.Web.Features.Client.Todo.UpdateTodo;
 
-public class TodoValidator : ValidatorBase<TodoEndpoint.Request>
+public record Request(string Title);
+```
+
+**File**: `UpdateTodo/Validator.cs`
+
+```csharp
+namespace March.Web.Features.Client.Todo.UpdateTodo;
+
+public class Validator : ValidatorBase<Validator, Request>
 {
-    public TodoValidator()
+    public Validator(ILogger<Validator> logger, ValidationContext validationContext)
+        : base(logger, validationContext)
     {
         RuleFor(x => x.Title)
             .NotEmpty()
-            .MaximumLength(100);
+            .WithMessage("Title is required")
+            .MaximumLength(100)
+            .WithMessage("Title must be 100 characters or less");
     }
 }
 ```
 
-Inherits from `ValidatorBase<T>` which implements FluentValidation.
+**Key conventions**:
+- Validators inherit from `ValidatorBase<TValidator, TRequest>`
+- Constructor requires `ILogger<TValidator>` and `ValidationContext` (injected)
+- Must call base constructor with both parameters
+- Applied via `.WithValidation<Validator>()` on route
 
-### 5. Register Routes in Program.cs
+---
+
+#### 5. Register in Program.cs
 **Location**: `src/March.Web/Program.cs`
 
-```csharp
-routes.AddRoutePath(HTTP.GET, "/todo", TodoEndpoint.GetTodo)
-      .Produces<RazorComponentResult<Todo>>()
-      .AllowAnonymous()  // or .RequireAuthorization()
-      .WithSummary("Get todo component");
+Add to the endpoint instantiation list:
 
-routes.AddRoutePath(HTTP.POST, "/todo/update", TodoEndpoint.UpdateTodo)
-      .Produces<RazorComponentResult<Todo>>()
-      .WithFeatureFlags(FeatureFlag.Todo)        // Optional
-      .WithValidation<TodoValidator>()            // Optional
-      .AllowAnonymous()
-      .WithSummary("Update todo component");
+```csharp
+// Add client-side features
+_ = new March.Web.Features.Client.Todo.GetTodo.Endpoint(routeGroup);
+_ = new March.Web.Features.Client.Todo.UpdateTodo.Endpoint(routeGroup);
 ```
 
-**Available extensions**:
-- `.WithFeatureFlags(FeatureFlag.{Name})` - Requires feature flag
-- `.WithValidation<TValidator>()` - Adds request validation
-- `.AllowAnonymous()` / `.RequireAuthorization()` - Auth requirements
-- `.Produces<T>()` - OpenAPI documentation
-- `.WithSummary(string)` - Endpoint description
+**Why This Works**:
+- Endpoint constructors self-register when instantiated
+- `routeGroup` is passed in and used for registration
+- No need to manually call `MapGet`/`MapPost` in Program.cs
 
-### 6. Add Feature Flag (Optional)
+---
+
+#### 6. Add Feature Flag (Optional)
 **File**: `src/March.Web/Utils/Enums.cs`
+
 ```csharp
 public enum FeatureFlag
 {
@@ -279,6 +371,7 @@ public enum FeatureFlag
 ```
 
 **File**: `src/March.Web/appsettings.json`
+
 ```json
 {
   "Features": {
@@ -291,6 +384,19 @@ public enum FeatureFlag
 
 ---
 
+### Available Route Builder Extensions
+
+Use these in the endpoint constructor when registering routes:
+
+- `.WithFeatureFlags(FeatureFlag.{Name})` - Requires feature flag to be enabled
+- `.WithValidation<TValidator>()` - Adds request validation via filter
+- `.AllowAnonymous()` - Allows unauthenticated access
+- `.RequireAuthorization()` - Requires authentication
+- `.Produces<T>()` - OpenAPI documentation for response type
+- `.WithSummary(string)` - Endpoint description for OpenAPI
+
+---
+
 ## Common Patterns
 
 ### HTMX Usage Conventions
@@ -299,15 +405,20 @@ public enum FeatureFlag
 Most common pattern - component replaces itself with updated state.
 
 ```html
-<div id="component-name">
-    <button hx-post="/component/update"
-            hx-target="#component-name"
+<div id="counter">
+    <button hx-post="counter/update"
+            hx-target="#counter"
             hx-swap="outerHTML"
             hx-ext="json-enc"
-            hx-vals='@((Model with { Value = newValue }).ToJson())'>
-        Update
+            hx-vals='{"Count": @(Count + 1)}'>
+        Increment
     </button>
 </div>
+
+@code {
+    [Parameter] 
+    public int Count { get; set; }
+}
 ```
 
 **Key attributes**:
@@ -315,18 +426,9 @@ Most common pattern - component replaces itself with updated state.
 - `hx-target`: CSS selector for element to update (usually the component's root id)
 - `hx-swap="outerHTML"`: Replace the entire target element
 - `hx-ext="json-enc"`: Encode body as JSON
-- `hx-vals`: JSON payload sent in request body
+- `hx-vals`: JSON object sent in request body (matches Request DTO properties)
 
-#### Pattern 2: Record "with" Syntax
-Use C# record `with` expressions to create modified copies:
-
-```csharp
-@((Model with { Count = Model.Count + 1 }).ToJson())
-```
-
-This creates a new model instance with one property changed.
-
-#### Pattern 3: Validation Error Display
+#### Pattern 2: Validation Error Display
 Access validation errors via injected `ValidationContext`:
 
 ```razor
@@ -338,24 +440,32 @@ Access validation errors via injected `ValidationContext`:
 
 ### Endpoint Return Patterns
 
-#### Returning a component without data
+All endpoints return `RazorComponentResult<T>` to render Razor components.
+
+#### Returning a component without parameters
 ```csharp
-public static IResult GetComponent()
+public static IResult Handler()
 {
-    return Component<MyComponent>();
+    return new RazorComponentResult<Components.MyComponent>();
 }
 ```
 
-#### Returning a component with data
+#### Returning a component with parameters
 ```csharp
-public static IResult GetComponent(Request request)
+public static IResult Handler(Request request)
 {
-    return Component<MyComponent, MyModel>(model: new()
+    return new RazorComponentResult<Components.MyComponent>(new
     {
-        Property = request.Value
+        Title = request.Title,
+        Count = request.Count
     });
 }
 ```
+
+**Key points**:
+- Anonymous object properties must match component `[Parameter]` names
+- Use direct `new RazorComponentResult<T>()` instantiation
+- Generic type references the component in `Components/` folder
 
 ### Service Injection in Razor Components
 ```razor
@@ -426,12 +536,15 @@ Always provide default values or null-forgiving operator.
 5. Component displays validation errors
 
 ### Creating Validators
-Inherit from `ValidatorBase<TRequest>`:
+Inherit from `ValidatorBase<TValidator, TRequest>` and inject dependencies:
 
 ```csharp
-public class MyValidator : ValidatorBase<MyEndpoint.Request>
+namespace March.Web.Features.Client.Form.SubmitForm;
+
+public class Validator : ValidatorBase<Validator, Request>
 {
-    public MyValidator()
+    public Validator(ILogger<Validator> logger, ValidationContext validationContext)
+        : base(logger, validationContext)
     {
         RuleFor(x => x.Property)
             .NotEmpty()
@@ -440,7 +553,24 @@ public class MyValidator : ValidatorBase<MyEndpoint.Request>
 }
 ```
 
-Automatically registered via `AddValidatorsFromAssemblyContaining<Program>()` in `Program.cs`.
+**Key requirements**:
+- Inherit from `ValidatorBase<TValidator, TRequest>` (two generic parameters)
+- Constructor must accept `ILogger<TValidator>` and `ValidationContext`
+- Must call base constructor: `base(logger, validationContext)`
+- Automatically registered via `AddValidatorsFromAssemblyContaining<Program>()` in `Program.cs`
+
+### Registering Validators
+Apply to endpoints via `.WithValidation<Validator>()`:
+
+```csharp
+public Endpoint(RouteGroupBuilder route)
+{
+    route
+        .MapPost(Path, Handler)
+        .WithValidation<Validator>()  // Registers validation filter
+        .AllowAnonymous();
+}
+```
 
 ### Accessing Validation Results
 
@@ -499,22 +629,88 @@ Located in `src/March.Web/Utils/`:
 
 - **Constants.cs**: HTTP method constants (`HTTP.GET`, `HTTP.POST`)
 - **Enums.cs**: Feature flags and other enums
-- **Extensions.cs**: Extension methods (route registration helpers)
+- **Extensions.cs**: Extension methods for route configuration and validation
 - **ValidationContext.cs**: Scoped service for validation results
-- **ValidatorBase.cs**: Base class for FluentValidation validators
+- **ValidatorBase.cs**: Base class for FluentValidation validators with filter integration
 - **StringToBooleanConverter.cs**: JSON converter for string→bool
 
 ### Key Extension Methods
 
-#### Route Registration
+#### Validation Context Helper
 ```csharp
-routes.AddRoutePath(HTTP.GET, "/path", HandlerMethod)
+ValidationContext.TryGetError(nameof(PropertyName), out var error)
+```
+Used in Razor components to retrieve validation errors by property name.
+
+#### Route Configuration Extensions
+```csharp
+.WithFeatureFlags(FeatureFlag.FeatureName)
+.WithValidation<Validator>()
 ```
 
-#### Component Result Helper
-```csharp
-Component<TRazorComponent>()
-Component<TRazorComponent, TModel>(model: modelInstance)
-```
+Applied in endpoint constructors to add filters to routes.
 
-Both are static imports - available globally via `GlobalUsings.cs`.
+---
+
+## Quick Reference
+
+### Adding a New GET Endpoint
+
+1. Create folder: `Features/Client/{Feature}/Get{Feature}/`
+2. Add `Endpoint.cs`:
+```csharp
+namespace March.Web.Features.Client.{Feature}.Get{Feature};
+
+public class Endpoint
+{
+    public const string Path = "/{feature}";
+    private const string summary = "Get {feature}";
+
+    public Endpoint(RouteGroupBuilder route)
+    {
+        route.MapGet(Path, Handler).Produces<RazorComponentResult<Components.{Feature}>>().AllowAnonymous();
+    }
+
+    public static IResult Handler()
+    {
+        return new RazorComponentResult<Components.{Feature}>();
+    }
+}
+```
+3. Register in `Program.cs`: `_ = new March.Web.Features.Client.{Feature}.Get{Feature}.Endpoint(routeGroup);`
+
+### Adding a POST Endpoint with Validation
+
+1. Create folder: `Features/Client/{Feature}/{Operation}/`
+2. Add `Request.cs`: `public record Request(string Property);`
+3. Add `Validator.cs`:
+```csharp
+public class Validator : ValidatorBase<Validator, Request>
+{
+    public Validator(ILogger<Validator> logger, ValidationContext validationContext)
+        : base(logger, validationContext)
+    {
+        RuleFor(x => x.Property).NotEmpty();
+    }
+}
+```
+4. Add `Endpoint.cs` with `.WithValidation<Validator>()`
+5. Register in `Program.cs`
+
+### Component with HTMX Self-Update
+
+```razor
+<div id="my-component">
+    <button hx-post="/my-component/update"
+            hx-target="#my-component"
+            hx-swap="outerHTML"
+            hx-ext="json-enc"
+            hx-vals='{"Value": @(Value + 1)}'>
+        Update
+    </button>
+</div>
+
+@code {
+    [Parameter] public int Value { get; set; }
+}
+```

@@ -1,0 +1,30 @@
+﻿@using static March.Web.Features.Client.Form.Components.Form
+
+<div class="mb-4" hx-target="this" hx-swap="outerHTML">
+    <label class="block font-bold mb-2" for="email">
+        Email
+    </label>
+
+    <input 
+        name="@nameof(Email)"
+        class="w-full text-gray-900 p-3 border border-gray-300 rounded-md focus:outline-none"
+        type="email"
+        value="@Email"
+        placeholder="e.g. john.doe@email.com"
+        hx-post="@(March.Web.Features.Client.Form.ValidateEmail.Endpoint.Path)"
+        hx-ext='json-enc'>
+
+    @if (ValidationContext.TryGetError(nameof(Email), out var error))
+    {
+        <p class="text-red-600 text-sm mt-2">@error.ErrorMessage</p>
+    }
+</div>  
+
+@code 
+{
+    [Inject] 
+    public ValidationContext ValidationContext { get; set; } = new();
+
+    [Parameter] 
+    public string? Email { get; set; }
+}

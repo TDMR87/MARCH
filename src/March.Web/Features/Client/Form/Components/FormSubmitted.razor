@@ -1,0 +1,25 @@
+﻿<div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md">
+        <!-- Modal Content -->
+        <div class="p-6">
+            <p class="text-gray-700 text-lg">Form submitted!</p>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="p-4 bg-gray-100 rounded-b-lg flex justify-end">
+            <button class="px-4 py-2 bg-sky-500 text-white font-semibold rounded-md hover:bg-sky-600"
+                    hx-post="@(March.Web.Features.Client.Form.FormSubmitted.Endpoint.Path)"
+                    hx-target="#mainContentArea"
+                    hx-ext="json-enc"
+                    hx-vals='{"toggle": false}'>
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+@code 
+{
+    [Parameter] 
+    public bool Toggle { get; set; }
+}

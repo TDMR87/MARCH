@@ -1,6 +1,6 @@
 ﻿<div class="flex flex-col min-h-screen">
     <!-- Navigation Bar -->
-    <NavBar />
+    <March.Web.Features.Client.Nav.Components.NavBar />
 
     <!-- Main Content Area -->
     <section class="flex-grow py-24">
@@ -8,13 +8,13 @@
             <div class="flex flex-col md:flex-row">
                 <!-- Side Navigation Items -->
                 <nav class="w-full md:w-1/5">
-                    <NavItems />
+                    <March.Web.Features.Client.Nav.Components.NavItems />
                 </nav>
 
                 <!-- Main Content Area -->
                 <div class="w-full md:w-4/5">
                     <div class="p-8">
-                        <Hero />
+                        <March.Web.Features.Client.Hero.Components.Hero />
                     </div>
                     <div class="p-12" id="mainContentArea" hx-get="@CurrentRoute" hx-trigger="load">
                         <!-- Swap content here with HTMX -->

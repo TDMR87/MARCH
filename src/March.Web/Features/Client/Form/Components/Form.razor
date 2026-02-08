@@ -1,0 +1,60 @@
+﻿<form id="inputForm"
+      method="post"
+      hx-post="@(March.Web.Features.Client.Form.SubmitForm.Endpoint.Path)"
+      hx-ext="json-enc"
+      hx-target="#mainContentArea"
+      class="space-y-6">
+
+    <!-- Name Field -->
+    <div class="mb-4">
+        <label class="block font-bold mb-2">
+            Name
+        </label>
+
+        <input name="@(nameof(Name))"
+                value="@Name"
+                class="w-full text-gray-900 p-3 border border-gray-300 rounded-md focus:outline-none"
+                type="text"
+                placeholder="e.g. John Doe">
+
+        @if (ValidationContext.TryGetError(nameof(Name), out var error))
+        {
+            <p class="text-red-600 text-sm mt-2">@error.ErrorMessage</p>
+        }
+    </div>
+
+    <!-- Email Field -->
+    <FormEmail Email="@Email" />
+
+    <!-- Submit Button -->
+    <div class="mt-4">
+        <button class="px-4 py-2 text-white font-bold rounded-md bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500"
+                hx-post="@(March.Web.Features.Client.Form.SubmitForm.Endpoint.Path)"
+                hx-trigger="click"
+                hx-ext="json-enc"
+                hx-target="#inputForm"
+                hx-swap="outerHTML">
+            Submit
+        </button>
+    </div>
+
+    <p>
+        For the <b>'Name'</b> field, an error message will be displayed if it is not filled when submitting the form.
+        <br />
+        <br />
+        For the <b>'Email'</b> field, an error message is displayed as soon as the focus leaves the element and
+        the value is not in a valid email format.
+    </p>
+</form>
+
+@code
+{
+    [Inject] 
+    public ValidationContext ValidationContext { get; set; } = new();
+
+    [Parameter]
+    public string? Name { get; set; }
+
+    [Parameter]
+    public string? Email { get; set; }
+}

@@ -1,0 +1,123 @@
+﻿<div id="nav-items" 
+     class="w-full md:w-4/4 p-4 fixed"
+     hx-get="@(March.Web.Features.Client.Nav.GetNav.Endpoint.Path)"
+     hx-trigger="login from:body, logout from:body" 
+     hx-target="this" 
+     hx-swap="outerHTML">
+
+    <aside class="menu p-4 z-20 shadow-xl md:shadow-none absolute rounded-lg bg-stone-200/5 backdrop-blur-md rounded-lg md:bg-transparent md:backdrop-blur-none">
+        <p class="font-bold text-sm mb-2">GENERAL</p>
+        <ul class="space-y-2">
+            <li>
+                <a hx-get="@(March.Web.Features.Client.Home.GetHome.Endpoint.Path)"
+                   hx-push-url="/"
+                   hx-trigger="click" 
+                   hx-target="#mainContentArea" 
+                   hx-swap="innerHTML"
+                   hx-on::before-request="hideNavItems()"
+                   class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
+                   Home
+                </a>
+            </li>
+            <li>
+                <a hx-get="@(March.Web.Features.Client.HowItWorks.GetHowItWorks.Endpoint.Path)"
+                   hx-push-url="true"
+                   hx-trigger="click" 
+                   hx-target="#mainContentArea" 
+                   hx-swap="innerHTML"
+                   hx-on::before-request="hideNavItems()"
+                   class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
+                   How it works
+                </a>
+            </li>
+        </ul>
+
+        <p class="font-bold text-sm mb-2 mt-5">DEMO</p>
+        <ul class="space-y-2">
+            <li>
+                <a hx-get="@(March.Web.Features.Client.Counter.GetCounter.Endpoint.Path)"
+                   hx-push-url="true"
+                   hx-trigger="click" 
+                   hx-target="#mainContentArea" 
+                   hx-swap="innerHTML" 
+                   hx-ext='json-enc'
+                   hx-on::before-request="hideNavItems()"
+                   class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
+                   Counter
+                </a>
+            </li>
+            <li>
+                <a hx-get="@(March.Web.Features.Client.Form.GetForm.Endpoint.Path)"
+                   hx-push-url="true"
+                   hx-trigger="click"
+                   hx-target="#mainContentArea"
+                   hx-swap="innerHTML"
+                   hx-ext='json-enc'
+                   hx-on::before-request="hideNavItems()"
+                   class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
+                   Form
+                </a>
+            </li>
+        </ul>
+
+        <p class="font-bold text-sm mb-2 mt-5">AUTH</p>
+        <ul class="space-y-2">
+            @if (HttpContextAccessor?.HttpContext?.User.Identity?.IsAuthenticated == false)
+            {
+                <li>
+                    <a hx-get="@(March.Web.Features.Client.Auth.GetLogin.Endpoint.Path)"
+                       hx-push-url="true"
+                       hx-trigger="click"
+                       hx-target="#mainContentArea"
+                       hx-swap="innerHTML"
+                       hx-ext='json-enc'
+                       hx-on::before-request="hideNavItems()"
+                       class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
+                       <b>Log in</b>
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a hx-post="@(March.Web.Features.Client.Auth.Logout.Endpoint.Path)"
+                       hx-push-url="/"
+                       hx-trigger="click"
+                       hx-target="#mainContentArea"
+                       hx-swap="innerHTML"
+                       hx-ext='json-enc'
+                       hx-on::before-request="hideNavItems()"
+                       class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
+                       Log out
+                    </a>
+                </li>
+                <li>
+                    <a hx-get="@(March.Web.Features.Client.Admin.GetDashboard.Endpoint.Path)"
+                       hx-push-url="true"
+                       hx-trigger="click"
+                       hx-target="#mainContentArea"
+                       hx-swap="innerHTML"
+                       hx-ext='json-enc'
+                       hx-on::before-request="hideNavItems()"
+                       class="block p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded cursor-pointer">
+                       Admin dashboard
+                    </a>
+                </li>
+            }
+        </ul>
+    </aside>
+</div>
+
+<script>
+    function hideNavItems() {
+        const navItems = document.getElementById('nav-items');
+        if (navItems && isSmallScreen()) {
+            navItems.hidden = true;
+        }
+    }
+</script>
+
+@code
+{
+    [Inject] public IHttpContextAccessor? HttpContextAccessor { get; set; }
+}

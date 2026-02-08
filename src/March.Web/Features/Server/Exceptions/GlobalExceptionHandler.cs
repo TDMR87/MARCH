@@ -15,15 +15,16 @@ internal sealed class GlobalExceptionHandler(
         httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
         httpContext.Response.ContentType = "text/html";
 
-        await Component<GlobalException, GlobalExceptionModel>
-        (
-            model: new() 
-            { 
-                Message = environment.IsProduction()
-                    ? "Something went wrong."
-                    : exception.ToString()
-            }
-        ).ExecuteAsync(httpContext);
+        var message = environment.IsProduction()
+            ? "Something went wrong."
+            : exception.ToString();
+
+        await new RazorComponentResult<GlobalException>(
+            new GlobalExceptionModel 
+            {
+                Message = message 
+            })
+            .ExecuteAsync(httpContext);
 
         return true;
     }
